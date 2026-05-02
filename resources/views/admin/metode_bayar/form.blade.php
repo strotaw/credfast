@@ -1,0 +1,19 @@
+@extends('layouts.panel', ['panel' => 'admin'])
+@section('page-title', $item->exists ? 'Edit Metode Bayar' : 'Tambah Metode Bayar')
+@section('content')
+    <form method="POST" action="{{ $action }}" enctype="multipart/form-data" class="shell-card p-8">
+        @csrf
+        @if ($method !== 'POST') @method($method) @endif
+        <div class="grid gap-4 md:grid-cols-2">
+            <input type="text" name="nama_bank" value="{{ old('nama_bank', $item->nama_bank) }}" class="shell-input" placeholder="Nama bank">
+            <input type="text" name="nomor_rekening" value="{{ old('nomor_rekening', $item->nomor_rekening) }}" class="shell-input" placeholder="Nomor rekening">
+            <input type="text" name="atas_nama" value="{{ old('atas_nama', $item->atas_nama) }}" class="shell-input" placeholder="Atas nama">
+            <select name="status" class="shell-select">
+                <option value="aktif" @selected(old('status', $item->status) === 'aktif')>Aktif</option>
+                <option value="nonaktif" @selected(old('status', $item->status) === 'nonaktif')>Nonaktif</option>
+            </select>
+            <div class="md:col-span-2"><input type="file" name="url_logo" class="shell-input"></div>
+        </div>
+        <button class="btn-primary mt-6">Simpan</button>
+    </form>
+@endsection

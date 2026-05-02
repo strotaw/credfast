@@ -15,8 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['user', 'marketing', 'admin', 'ceo'])->default('user');
+            $table->string('no_hp')->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('kota')->nullable();
+            $table->string('provinsi')->nullable();
+            $table->string('kode_pos')->nullable();
+            $table->string('foto')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
