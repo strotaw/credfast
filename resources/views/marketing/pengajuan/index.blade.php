@@ -23,6 +23,7 @@
                     <th>Pelanggan</th>
                     <th>Motor</th>
                     <th>Tenor</th>
+                    <th>Bayar</th>
                     <th>Status</th>
                     <th>Dibuat</th>
                     <th></th>
@@ -34,6 +35,7 @@
                         <td>{{ $item->user->name }}</td>
                         <td>{{ $item->motor->nama_motor }}</td>
                         <td>{{ $item->jenisCicilan->lama_cicilan }} bulan</td>
+                        <td>{{ $item->metodeBayar?->nama_bank ?? '-' }}</td>
                         <td><x-status-badge :status="$item->status_pengajuan" /></td>
                         <td>{{ $item->created_at->format('d M Y') }}</td>
                         <td><a href="{{ route('marketing.pengajuan.show', $item) }}" class="btn-secondary">Detail</a></td>

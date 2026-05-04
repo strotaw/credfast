@@ -30,7 +30,7 @@ class MotorController extends Controller
     public function create(): View
     {
         return view('admin.motor.form', [
-            'item' => new Motor(),
+            'item' => new Motor,
             'jenisMotor' => JenisMotor::query()->orderBy('merk')->get(),
             'statuses' => Motor::STATUS_OPTIONS,
             'action' => route('admin.motor.store'),
@@ -50,9 +50,9 @@ class MotorController extends Controller
             'tahun' => ['nullable', 'integer', 'min:2000', 'max:2100'],
             'stok' => ['required', 'integer', 'min:0'],
             'status' => ['required', Rule::in(Motor::STATUS_OPTIONS)],
-            'foto1' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'foto2' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'foto3' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'foto1' => $this->imageUploadRules(required: true),
+            'foto2' => $this->imageUploadRules(),
+            'foto3' => $this->imageUploadRules(),
         ]);
 
         $validated['foto1'] = $this->storePublicFile($request, 'foto1', 'motor');
@@ -96,9 +96,9 @@ class MotorController extends Controller
             'tahun' => ['nullable', 'integer', 'min:2000', 'max:2100'],
             'stok' => ['required', 'integer', 'min:0'],
             'status' => ['required', Rule::in(Motor::STATUS_OPTIONS)],
-            'foto1' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'foto2' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
-            'foto3' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'foto1' => $this->imageUploadRules(),
+            'foto2' => $this->imageUploadRules(),
+            'foto3' => $this->imageUploadRules(),
         ]);
 
         $validated['foto1'] = $this->storePublicFile($request, 'foto1', 'motor', $motor->foto1);

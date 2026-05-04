@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Marketing;
 use App\Http\Controllers\Controller;
 use App\Models\Asuransi;
 use App\Models\JenisCicilan;
+use App\Models\MetodeBayar;
 use App\Models\Motor;
 use App\Models\PengajuanKredit;
-use App\Models\User;
 use App\Support\ActivityLogger;
 use App\Support\PengajuanService;
 use Illuminate\Http\RedirectResponse;
@@ -21,7 +21,7 @@ class PengajuanKreditController extends Controller
     public function index(Request $request): View
     {
         $pengajuan = PengajuanKredit::query()
-            ->with(['user', 'motor', 'jenisCicilan', 'marketing', 'admin'])
+            ->with(['user', 'motor', 'jenisCicilan', 'metodeBayar', 'marketing', 'admin'])
             ->when($request->filled('status'), fn ($query) => $query->where('status_pengajuan', $request->string('status')))
             ->latest()
             ->paginate(12)
@@ -36,7 +36,7 @@ class PengajuanKreditController extends Controller
     public function show(PengajuanKredit $pengajuan): View
     {
         return view('marketing.pengajuan.show', [
-            'pengajuan' => $pengajuan->load(['user', 'motor.jenisMotor', 'jenisCicilan', 'asuransi', 'kredit']),
+            'pengajuan' => $pengajuan->load(['user', 'motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'kredit']),
             'statusOptions' => [
                 PengajuanKredit::STATUS_MENUNGGU,
                 PengajuanKredit::STATUS_DIPROSES,
@@ -101,6 +101,7 @@ class PengajuanKreditController extends Controller
             'motors' => Motor::query()->with('jenisMotor')->where('status', Motor::STATUS_TERSEDIA)->get(),
             'jenisCicilan' => JenisCicilan::query()->orderBy('lama_cicilan')->get(),
             'asuransi' => Asuransi::query()->orderBy('nama_asuransi')->get(),
+            'metodeBayar' => MetodeBayar::query()->where('status', MetodeBayar::STATUS_AKTIF)->orderBy('nama_bank')->get(),
         ]);
     }
 
@@ -117,6 +118,7 @@ class PengajuanKreditController extends Controller
             'motor_id' => ['required', 'exists:motor,id'],
             'jenis_cicilan_id' => ['required', 'exists:jenis_cicilan,id'],
             'asuransi_id' => ['nullable', 'exists:asuransi,id'],
+            'metode_bayar_id' => ['required', Rule::exists('metode_bayar', 'id')->where('status', MetodeBayar::STATUS_AKTIF)],
             'dp' => ['required', 'numeric', 'min:0'],
             'password' => ['nullable', 'confirmed', Password::min(8)],
             'url_kk' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
@@ -149,6 +151,7 @@ class PengajuanKreditController extends Controller
             ],
             [
                 'marketing_id' => auth()->id(),
+                'metode_bayar_id' => $validated['metode_bayar_id'],
                 'catatan_marketing' => 'Pengajuan offline dibuat oleh tim marketing.',
                 'status_pengajuan' => PengajuanKredit::STATUS_DIPROSES,
             ],

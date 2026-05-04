@@ -12,7 +12,18 @@
                 <option value="aktif" @selected(old('status', $item->status) === 'aktif')>Aktif</option>
                 <option value="nonaktif" @selected(old('status', $item->status) === 'nonaktif')>Nonaktif</option>
             </select>
-            <div class="md:col-span-2"><input type="file" name="url_logo" class="shell-input"></div>
+            <div class="md:col-span-2">
+                <label class="mb-2 block text-sm font-medium text-slate-700">Logo metode bayar</label>
+                @if ($item->logoUrl())
+                    <x-uploaded-image
+                        :src="$item->logoUrl()"
+                        :alt="$item->nama_bank"
+                        :label="str($item->nama_bank)->substr(0, 2)->upper()"
+                        class="mb-3 h-24 w-36 rounded-[22px] object-contain p-3"
+                    />
+                @endif
+                <input type="file" name="url_logo" class="shell-input" accept="image/jpeg,image/png,image/webp">
+            </div>
         </div>
         <button class="btn-primary mt-6">Simpan</button>
     </form>

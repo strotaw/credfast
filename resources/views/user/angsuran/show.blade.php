@@ -17,8 +17,21 @@
                 <div>Nominal: <span class="font-semibold text-slate-900">Rp {{ number_format($angsuran->nominal, 0, ',', '.') }}</span></div>
                 <div>Denda: <span class="font-semibold text-slate-900">Rp {{ number_format($angsuran->denda, 0, ',', '.') }}</span></div>
                 <div>Total bayar: <span class="font-semibold text-slate-900">Rp {{ number_format($angsuran->total_bayar, 0, ',', '.') }}</span></div>
-                <div>Bank tujuan: <span class="font-semibold text-slate-900">{{ $angsuran->kredit->metodeBayar?->nama_bank ?? 'Belum ditentukan admin' }}</span></div>
+                <div>Bank tujuan: <span class="font-semibold text-slate-900">{{ $angsuran->kredit->metodeBayar?->nama_bank ?? 'Belum dipilih' }}</span></div>
                 <div>Verifikator: <span class="font-semibold text-slate-900">{{ $angsuran->verifiedBy?->name ?? '-' }}</span></div>
+            </div>
+            <div class="mt-6 flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                <x-uploaded-image
+                    :src="$angsuran->kredit->metodeBayar?->logoUrl()"
+                    :alt="$angsuran->kredit->metodeBayar?->nama_bank ?? 'Metode bayar'"
+                    label="MB"
+                    class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                />
+                <div>
+                    <p class="font-semibold text-slate-900">{{ $angsuran->kredit->metodeBayar?->nama_bank ?? 'Belum ditentukan' }}</p>
+                    <p class="mt-1 text-slate-500">{{ $angsuran->kredit->metodeBayar?->nomor_rekening ?? '-' }}</p>
+                    <p class="mt-1 text-slate-500">{{ $angsuran->kredit->metodeBayar?->atas_nama ?? '-' }}</p>
+                </div>
             </div>
 
             @if ($angsuran->status === 'valid')
@@ -28,10 +41,12 @@
 
         <section class="shell-card p-8">
             <h3 class="section-title">Upload bukti bayar</h3>
-            <p class="mt-2 text-sm text-slate-500">Maksimal 2MB. Format `jpg`, `jpeg`, `png`, atau `pdf`.</p>
             <form method="POST" action="{{ route('user.angsuran.upload-bukti', $angsuran) }}" enctype="multipart/form-data" class="mt-6 space-y-4">
                 @csrf
-                <input type="file" name="bukti_bayar" class="shell-input" @if ($angsuran->status === 'valid') disabled @endif>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-slate-700">Bukti pembayaran angsuran</label>
+                    <input type="file" name="bukti_bayar" class="shell-input" @if ($angsuran->status === 'valid') disabled @endif>
+                </div>
                 <button class="btn-primary w-full" @if ($angsuran->status === 'valid') disabled @endif>Upload Bukti</button>
             </form>
             @if ($angsuran->keterangan)

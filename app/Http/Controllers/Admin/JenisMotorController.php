@@ -28,7 +28,7 @@ class JenisMotorController extends Controller
     public function create(): View
     {
         return view('admin.jenis_motor.form', [
-            'item' => new JenisMotor(),
+            'item' => new JenisMotor,
             'types' => self::TYPE_OPTIONS,
             'action' => route('admin.jenis-motor.store'),
             'method' => 'POST',
@@ -41,7 +41,7 @@ class JenisMotorController extends Controller
             'merk' => ['required', 'string', 'max:255'],
             'tipe' => ['required', Rule::in(self::TYPE_OPTIONS)],
             'deskripsi_jenis' => ['nullable', 'string'],
-            'image_url' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'image_url' => $this->imageUploadRules(),
         ]);
 
         $validated['image_url'] = $this->storePublicFile($request, 'image_url', 'motor');
@@ -76,7 +76,7 @@ class JenisMotorController extends Controller
             'merk' => ['required', 'string', 'max:255'],
             'tipe' => ['required', Rule::in(self::TYPE_OPTIONS)],
             'deskripsi_jenis' => ['nullable', 'string'],
-            'image_url' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'image_url' => $this->imageUploadRules(),
         ]);
 
         $validated['image_url'] = $this->storePublicFile($request, 'image_url', 'motor', $jenis_motor->image_url);

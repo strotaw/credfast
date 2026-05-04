@@ -22,7 +22,7 @@ class MetodeBayarController extends Controller
     public function create(): View
     {
         return view('admin.metode_bayar.form', [
-            'item' => new MetodeBayar(),
+            'item' => new MetodeBayar,
             'action' => route('admin.metode-bayar.store'),
             'method' => 'POST',
         ]);
@@ -35,7 +35,7 @@ class MetodeBayarController extends Controller
             'nomor_rekening' => ['required', 'string', 'max:255'],
             'atas_nama' => ['required', 'string', 'max:255'],
             'status' => ['required', Rule::in([MetodeBayar::STATUS_AKTIF, MetodeBayar::STATUS_NONAKTIF])],
-            'url_logo' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'url_logo' => $this->imageUploadRules(),
         ]);
 
         $validated['url_logo'] = $this->storePublicFile($request, 'url_logo', 'motor');
@@ -69,7 +69,7 @@ class MetodeBayarController extends Controller
             'nomor_rekening' => ['required', 'string', 'max:255'],
             'atas_nama' => ['required', 'string', 'max:255'],
             'status' => ['required', Rule::in([MetodeBayar::STATUS_AKTIF, MetodeBayar::STATUS_NONAKTIF])],
-            'url_logo' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'url_logo' => $this->imageUploadRules(),
         ]);
 
         $validated['url_logo'] = $this->storePublicFile($request, 'url_logo', 'motor', $metode_bayar->url_logo);

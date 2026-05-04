@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\HasPublicImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MetodeBayar extends Model
 {
-    use HasFactory;
+    use HasFactory, HasPublicImages;
 
     public const STATUS_AKTIF = 'aktif';
+
     public const STATUS_NONAKTIF = 'nonaktif';
 
     protected $table = 'metode_bayar';
@@ -26,5 +28,10 @@ class MetodeBayar extends Model
     public function kredit(): HasMany
     {
         return $this->hasMany(Kredit::class);
+    }
+
+    public function logoUrl(): ?string
+    {
+        return $this->publicImageUrl($this->url_logo);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Angsuran;
 use App\Models\Asuransi;
 use App\Models\JenisCicilan;
 use App\Models\MetodeBayar;
@@ -24,7 +23,7 @@ class PengajuanKreditController extends Controller
     public function index(Request $request): View
     {
         $pengajuan = PengajuanKredit::query()
-            ->with(['user', 'motor', 'jenisCicilan', 'marketing', 'admin', 'kredit'])
+            ->with(['user', 'motor', 'jenisCicilan', 'metodeBayar', 'marketing', 'admin', 'kredit'])
             ->when($request->filled('status'), fn ($query) => $query->where('status_pengajuan', $request->string('status')))
             ->latest()
             ->paginate(12)
@@ -39,8 +38,7 @@ class PengajuanKreditController extends Controller
     public function show(PengajuanKredit $pengajuan): View
     {
         return view('admin.pengajuan.show', [
-            'pengajuan' => $pengajuan->load(['user', 'motor.jenisMotor', 'jenisCicilan', 'asuransi', 'marketing', 'admin', 'kredit.angsuran']),
-            'metodeBayar' => MetodeBayar::query()->where('status', MetodeBayar::STATUS_AKTIF)->get(),
+            'pengajuan' => $pengajuan->load(['user', 'motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'marketing', 'admin', 'kredit.angsuran', 'kredit.metodeBayar']),
         ]);
     }
 
@@ -81,14 +79,13 @@ class PengajuanKreditController extends Controller
     public function buatKredit(Request $request, PengajuanKredit $pengajuan): RedirectResponse
     {
         $validated = $request->validate([
-            'metode_bayar_id' => ['nullable', 'exists:metode_bayar,id'],
             'tgl_mulai_kredit' => ['nullable', 'date'],
         ]);
 
         try {
             $kredit = CreditWorkflow::createKredit(
-                $pengajuan->load(['motor', 'jenisCicilan']),
-                $request->filled('metode_bayar_id') ? MetodeBayar::query()->findOrFail($validated['metode_bayar_id']) : null,
+                $pengajuan->load(['motor', 'jenisCicilan', 'metodeBayar']),
+                null,
                 $request->filled('tgl_mulai_kredit') ? Carbon::parse($validated['tgl_mulai_kredit']) : null,
             );
         } catch (RuntimeException $exception) {
@@ -106,6 +103,7 @@ class PengajuanKreditController extends Controller
             'motors' => Motor::query()->with('jenisMotor')->where('status', Motor::STATUS_TERSEDIA)->get(),
             'jenisCicilan' => JenisCicilan::query()->orderBy('lama_cicilan')->get(),
             'asuransi' => Asuransi::query()->orderBy('nama_asuransi')->get(),
+            'metodeBayar' => MetodeBayar::query()->where('status', MetodeBayar::STATUS_AKTIF)->orderBy('nama_bank')->get(),
         ]);
     }
 
@@ -122,6 +120,7 @@ class PengajuanKreditController extends Controller
             'motor_id' => ['required', 'exists:motor,id'],
             'jenis_cicilan_id' => ['required', 'exists:jenis_cicilan,id'],
             'asuransi_id' => ['nullable', 'exists:asuransi,id'],
+            'metode_bayar_id' => ['required', Rule::exists('metode_bayar', 'id')->where('status', MetodeBayar::STATUS_AKTIF)],
             'dp' => ['required', 'numeric', 'min:0'],
             'url_kk' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
             'url_ktp' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
@@ -150,6 +149,7 @@ class PengajuanKreditController extends Controller
             ],
             [
                 'admin_id' => auth()->id(),
+                'metode_bayar_id' => $validated['metode_bayar_id'],
                 'keterangan_status_pengajuan' => 'Pengajuan offline dibuat oleh admin.',
                 'status_pengajuan' => PengajuanKredit::STATUS_DIPROSES,
             ],

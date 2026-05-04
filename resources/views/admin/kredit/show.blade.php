@@ -12,6 +12,19 @@
                 <div>Motor: <span class="font-semibold text-slate-900">{{ $kredit->pengajuanKredit->motor->nama_motor }}</span></div>
                 <div>Total kredit: <span class="font-semibold text-slate-900">Rp {{ number_format($kredit->total_kredit, 0, ',', '.') }}</span></div>
                 <div>Sisa kredit: <span class="font-semibold text-slate-900">Rp {{ number_format($kredit->sisa_kredit, 0, ',', '.') }}</span></div>
+                <div>Metode bayar: <span class="font-semibold text-slate-900">{{ $kredit->metodeBayar?->nama_bank ?? '-' }}</span></div>
+            </div>
+            <div class="mt-6 flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                <x-uploaded-image
+                    :src="$kredit->metodeBayar?->logoUrl()"
+                    :alt="$kredit->metodeBayar?->nama_bank ?? 'Metode bayar'"
+                    label="MB"
+                    class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                />
+                <div>
+                    <p class="font-semibold text-slate-900">{{ $kredit->metodeBayar?->nama_bank ?? '-' }}</p>
+                    <p class="mt-1 text-slate-500">{{ $kredit->metodeBayar?->nomor_rekening ?? '-' }}</p>
+                </div>
             </div>
         </section>
         <form method="POST" action="{{ route('admin.kredit.status', $kredit) }}" class="shell-card p-8">

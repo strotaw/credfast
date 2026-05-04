@@ -32,7 +32,7 @@ class ProfileController extends Controller
             'kota' => ['nullable', 'string', 'max:100'],
             'provinsi' => ['nullable', 'string', 'max:100'],
             'kode_pos' => ['nullable', 'string', 'max:20'],
-            'foto' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'foto' => $this->imageUploadRules(),
         ]);
 
         $validated['foto'] = $this->storePublicFile($request, 'foto', 'profile', $user->foto);

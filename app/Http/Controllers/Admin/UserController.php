@@ -33,7 +33,7 @@ class UserController extends Controller
     public function create(): View
     {
         return view('admin.users.form', [
-            'user' => new User(),
+            'user' => new User,
             'roles' => User::ROLES,
             'action' => route('admin.users.store'),
             'method' => 'POST',
@@ -52,7 +52,7 @@ class UserController extends Controller
             'kota' => ['nullable', 'string', 'max:100'],
             'provinsi' => ['nullable', 'string', 'max:100'],
             'kode_pos' => ['nullable', 'string', 'max:20'],
-            'foto' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'foto' => $this->imageUploadRules(),
         ]);
 
         $validated['foto'] = $this->storePublicFile($request, 'foto', 'profile');
@@ -93,7 +93,7 @@ class UserController extends Controller
             'kota' => ['nullable', 'string', 'max:100'],
             'provinsi' => ['nullable', 'string', 'max:100'],
             'kode_pos' => ['nullable', 'string', 'max:20'],
-            'foto' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'foto' => $this->imageUploadRules(),
         ]);
 
         $validated['foto'] = $this->storePublicFile($request, 'foto', 'profile', $user->foto);

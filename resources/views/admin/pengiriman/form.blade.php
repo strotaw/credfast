@@ -16,7 +16,10 @@
             <select name="status_kirim" class="shell-select">@foreach ($statuses as $status)<option value="{{ $status }}" @selected(old('status_kirim', $item->status_kirim) === $status)>{{ str($status)->title() }}</option>@endforeach</select>
             <input type="text" name="nama_kurir" value="{{ old('nama_kurir', $item->nama_kurir) }}" class="shell-input" placeholder="Nama kurir">
             <input type="text" name="telpon_kurir" value="{{ old('telpon_kurir', $item->telpon_kurir) }}" class="shell-input" placeholder="Telpon kurir">
-            <input type="file" name="bukti_foto" class="shell-input">
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Foto bukti pengiriman</label>
+                <input type="file" name="bukti_foto" class="shell-input">
+            </div>
             <div class="md:col-span-2"><textarea name="keterangan" class="shell-textarea" placeholder="Keterangan">{{ old('keterangan', $item->keterangan) }}</textarea></div>
         </div>
         <button class="btn-primary mt-6">Simpan Pengiriman</button>

@@ -3,6 +3,10 @@
 @section('title', $motor->nama_motor)
 
 @section('content')
+    @php
+        $fotoUrls = $motor->fotoUrls();
+    @endphp
+
     <section class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div class="shell-card p-8">
             <p class="text-sm uppercase tracking-[0.28em] text-slate-400">{{ $motor->jenisMotor->merk }} &middot; {{ str($motor->jenisMotor->tipe)->replace('_', ' ')->title() }}</p>
@@ -34,6 +38,27 @@
         </div>
 
         <div class="grid gap-6">
+            <div class="shell-card overflow-hidden">
+                <x-uploaded-image
+                    :src="$motor->primaryFotoUrl()"
+                    :alt="$motor->nama_motor"
+                    label="Motor"
+                    class="h-80 w-full object-cover"
+                />
+                @if (count($fotoUrls) > 1)
+                    <div class="grid grid-cols-3 gap-3 p-4">
+                        @foreach ($fotoUrls as $fotoUrl)
+                            <x-uploaded-image
+                                :src="$fotoUrl"
+                                :alt="$motor->nama_motor"
+                                label="Motor"
+                                class="h-24 w-full rounded-2xl object-cover"
+                            />
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
             <div class="shell-card p-7">
                 <p class="text-sm uppercase tracking-[0.28em] text-slate-400">Pengajuan</p>
                 <h2 class="mt-2 text-2xl font-semibold">Simulasi dan pengajuan</h2>
@@ -51,9 +76,17 @@
                 <p class="text-sm uppercase tracking-[0.28em] text-slate-400">Motor sejenis</p>
                 <div class="mt-4 space-y-4">
                     @forelse ($relatedMotors as $item)
-                        <a href="{{ route('public.motor.show', $item) }}" class="block rounded-2xl border border-slate-200 px-4 py-4 hover:bg-slate-50">
-                            <p class="font-semibold">{{ $item->nama_motor }}</p>
-                            <p class="mt-1 text-sm text-slate-500">Rp {{ number_format($item->harga_jual, 0, ',', '.') }}</p>
+                        <a href="{{ route('public.motor.show', $item) }}" class="flex items-center gap-3 rounded-2xl border border-slate-200 px-4 py-4 hover:bg-slate-50">
+                            <x-uploaded-image
+                                :src="$item->primaryFotoUrl()"
+                                :alt="$item->nama_motor"
+                                label="Motor"
+                                class="h-14 w-16 shrink-0 rounded-xl object-cover"
+                            />
+                            <div>
+                                <p class="font-semibold">{{ $item->nama_motor }}</p>
+                                <p class="mt-1 text-sm text-slate-500">Rp {{ number_format($item->harga_jual, 0, ',', '.') }}</p>
+                            </div>
                         </a>
                     @empty
                         <p class="text-sm text-slate-500">Belum ada motor serupa lain di katalog.</p>

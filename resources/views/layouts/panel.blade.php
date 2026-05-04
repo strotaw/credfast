@@ -111,11 +111,7 @@
                 <div class="mx-auto max-w-7xl px-6 py-4">
                     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-lg font-bold text-white">CF</div>
-                            <div>
-                                <p class="text-lg font-extrabold text-slate-950">CredFast</p>
-                                <p class="text-xs uppercase tracking-[0.32em] text-slate-400">Customer Portal</p>
-                            </div>
+                            <x-brand-logo subtitle="Customer Portal" />
                         </div>
 
                         <div class="flex flex-wrap items-center gap-3">
@@ -149,9 +145,19 @@
 
                         <div class="grid gap-3 sm:grid-cols-2">
                             <div class="rounded-[26px] border border-slate-200 bg-slate-50 p-4">
-                                <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Akun aktif</p>
-                                <p class="mt-3 text-lg font-semibold text-slate-950">{{ $user->name }}</p>
-                                <p class="text-sm text-slate-500">{{ $user->email }}</p>
+                                <div class="flex items-center gap-3">
+                                    <x-uploaded-image
+                                        :src="$user->fotoUrl()"
+                                        :alt="$user->name"
+                                        :label="str($user->name)->substr(0, 1)->upper()"
+                                        class="h-14 w-14 rounded-2xl object-cover"
+                                    />
+                                    <div class="min-w-0">
+                                        <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Akun aktif</p>
+                                        <p class="mt-2 truncate text-lg font-semibold text-slate-950">{{ $user->name }}</p>
+                                        <p class="truncate text-sm text-slate-500">{{ $user->email }}</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="rounded-[26px] border border-slate-200 bg-slate-50 p-4">
                                 <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Status portal</p>
@@ -186,11 +192,7 @@
             <aside id="panel-sidebar" class="fixed left-0 top-0 z-50 flex h-screen w-[290px] -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-300 xl:translate-x-0">
                 <div class="flex items-center justify-between px-5 pb-7 pt-8">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-lg font-bold text-white">CF</div>
-                        <div>
-                            <p class="text-lg font-extrabold text-slate-950">CredFast</p>
-                            <p class="text-xs uppercase tracking-[0.32em] text-slate-400">{{ strtoupper($panel) }} panel</p>
-                        </div>
+                        <x-brand-logo :subtitle="strtoupper($panel).' panel'" />
                     </a>
 
                     <button type="button" data-panel-close class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 text-slate-500 xl:hidden">
@@ -208,7 +210,12 @@
                                 <p class="mt-3 text-lg font-semibold">{{ $user->name }}</p>
                                 <p class="mt-1 text-sm text-slate-400">{{ $user->email }}</p>
                             </div>
-                            <div class="h-12 w-12 rounded-2xl bg-gradient-to-br {{ $theme['mark'] }}"></div>
+                            <x-uploaded-image
+                                :src="$user->fotoUrl()"
+                                :alt="$user->name"
+                                :label="str($user->name)->substr(0, 1)->upper()"
+                                class="h-12 w-12 shrink-0 rounded-2xl object-cover"
+                            />
                         </div>
                         <span class="mt-5 inline-flex rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset {{ $theme['badge'] }}">{{ strtoupper($user->role) }}</span>
                     </div>

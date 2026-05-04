@@ -46,6 +46,12 @@
         <section class="shell-card p-8">
             <p class="text-sm uppercase tracking-[0.28em] text-slate-400">Hasil</p>
             @if ($simulation)
+                <x-uploaded-image
+                    :src="$simulation['motor']->primaryFotoUrl()"
+                    :alt="$simulation['motor']->nama_motor"
+                    label="Motor"
+                    class="mt-5 h-56 w-full rounded-[24px] object-cover"
+                />
                 <h2 class="mt-2 text-3xl font-semibold">{{ $simulation['motor']->nama_motor }}</h2>
                 <p class="mt-2 text-sm text-slate-500">Tenor {{ $simulation['jenisCicilan']->lama_cicilan }} bulan @if($simulation['asuransi']) &middot; {{ $simulation['asuransi']->nama_asuransi }} @endif</p>
                 <div class="mt-6 grid gap-4 sm:grid-cols-2">

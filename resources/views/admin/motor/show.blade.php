@@ -2,6 +2,23 @@
 @section('page-title', 'Detail Motor')
 @section('content')
     <div class="shell-card p-8">
+        <div class="mb-6 grid gap-3 sm:grid-cols-3">
+            @forelse ($item->fotoUrls() as $fotoUrl)
+                <x-uploaded-image
+                    :src="$fotoUrl"
+                    :alt="$item->nama_motor"
+                    label="Motor"
+                    class="h-44 w-full rounded-[24px] object-cover"
+                />
+            @empty
+                <x-uploaded-image
+                    :src="null"
+                    :alt="$item->nama_motor"
+                    label="Motor"
+                    class="h-44 w-full rounded-[24px] object-cover sm:col-span-3"
+                />
+            @endforelse
+        </div>
         <div class="flex items-center justify-between gap-3">
             <div>
                 <p class="text-sm uppercase tracking-[0.28em] text-slate-400">{{ $item->jenisMotor->merk }}</p>

@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\HasPublicImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Motor extends Model
 {
-    use HasFactory;
+    use HasFactory, HasPublicImages;
 
     public const STATUS_TERSEDIA = 'tersedia';
+
     public const STATUS_HABIS = 'habis';
+
     public const STATUS_NONAKTIF = 'nonaktif';
 
     public const STATUS_OPTIONS = [
@@ -50,6 +53,37 @@ class Motor extends Model
     public function jenisMotor(): BelongsTo
     {
         return $this->belongsTo(JenisMotor::class);
+    }
+
+    public function primaryFotoUrl(): ?string
+    {
+        foreach (['foto1', 'foto2', 'foto3'] as $field) {
+            $url = $this->publicImageUrl($this->{$field});
+
+            if ($url) {
+                return $url;
+            }
+        }
+
+        return null;
+    }
+
+    public function fotoUrl(string $field): ?string
+    {
+        if (! in_array($field, ['foto1', 'foto2', 'foto3'], true)) {
+            return null;
+        }
+
+        return $this->publicImageUrl($this->{$field});
+    }
+
+    public function fotoUrls(): array
+    {
+        return collect([$this->foto1, $this->foto2, $this->foto3])
+            ->map(fn (?string $path) => $this->publicImageUrl($path))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     public function pengajuanKredit(): HasMany

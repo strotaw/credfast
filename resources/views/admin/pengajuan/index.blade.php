@@ -15,12 +15,13 @@
     </div>
     <div class="shell-card overflow-hidden">
         <table class="table-shell">
-            <thead class="bg-slate-50"><tr><th>Pelanggan</th><th>Motor</th><th>Status</th><th>Marketing</th><th>Kredit</th><th></th></tr></thead>
+            <thead class="bg-slate-50"><tr><th>Pelanggan</th><th>Motor</th><th>Bayar</th><th>Status</th><th>Marketing</th><th>Kredit</th><th></th></tr></thead>
             <tbody class="divide-y divide-slate-200 bg-white">
                 @foreach ($pengajuanList as $item)
                     <tr>
                         <td>{{ $item->user->name }}</td>
                         <td>{{ $item->motor->nama_motor }}</td>
+                        <td>{{ $item->metodeBayar?->nama_bank ?? '-' }}</td>
                         <td><x-status-badge :status="$item->status_pengajuan" /></td>
                         <td>{{ $item->marketing?->name ?? '-' }}</td>
                         <td>{{ $item->kredit?->no_kontrak ?? '-' }}</td>

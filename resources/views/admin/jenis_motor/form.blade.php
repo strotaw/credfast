@@ -12,7 +12,18 @@
                 @endforeach
             </select>
             <div class="md:col-span-2"><textarea name="deskripsi_jenis" class="shell-textarea" placeholder="Deskripsi">{{ old('deskripsi_jenis', $item->deskripsi_jenis) }}</textarea></div>
-            <div class="md:col-span-2"><input type="file" name="image_url" class="shell-input"></div>
+            <div class="md:col-span-2">
+                <label class="mb-2 block text-sm font-medium text-slate-700">Gambar jenis motor</label>
+                @if ($item->imageUrl())
+                    <x-uploaded-image
+                        :src="$item->imageUrl()"
+                        :alt="$item->merk"
+                        :label="str($item->merk)->substr(0, 2)->upper()"
+                        class="mb-3 h-36 w-full rounded-[22px] object-cover"
+                    />
+                @endif
+                <input type="file" name="image_url" class="shell-input" accept="image/jpeg,image/png,image/webp">
+            </div>
         </div>
         <button class="btn-primary mt-6">Simpan</button>
     </form>

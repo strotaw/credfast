@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\HasPublicImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Asuransi extends Model
 {
-    use HasFactory;
+    use HasFactory, HasPublicImages;
 
     protected $table = 'asuransi';
 
@@ -30,5 +31,10 @@ class Asuransi extends Model
     public function pengajuanKredit(): HasMany
     {
         return $this->hasMany(PengajuanKredit::class);
+    }
+
+    public function logoUrl(): ?string
+    {
+        return $this->publicImageUrl($this->url_logo);
     }
 }

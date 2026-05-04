@@ -19,11 +19,7 @@
 
                 <section class="shell-card mx-auto w-full max-w-xl p-8 sm:p-10">
                     <a href="{{ route('home') }}" class="mb-8 inline-flex items-center gap-3">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-lg font-bold text-white">CF</div>
-                        <div>
-                            <p class="font-extrabold text-slate-950">CredFast</p>
-                            <p class="text-xs uppercase tracking-[0.32em] text-slate-400">Account Access</p>
-                        </div>
+                        <x-brand-logo subtitle="Account Access" />
                     </a>
 
                     @if ($errors->any())

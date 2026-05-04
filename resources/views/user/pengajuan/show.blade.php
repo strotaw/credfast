@@ -5,6 +5,12 @@
 @section('content')
     <div class="grid gap-6 lg:grid-cols-[1.02fr_0.98fr]">
         <section class="shell-card p-8">
+            <x-uploaded-image
+                :src="$pengajuan->motor->primaryFotoUrl()"
+                :alt="$pengajuan->motor->nama_motor"
+                label="Motor"
+                class="mb-6 h-56 w-full rounded-[24px] object-cover"
+            />
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <p class="text-sm uppercase tracking-[0.28em] text-slate-400">Pengajuan Kredit</p>
@@ -19,6 +25,34 @@
                 <div>Cicilan / bulan: <span class="font-semibold text-slate-900">Rp {{ number_format($pengajuan->cicilan_perbulan, 0, ',', '.') }}</span></div>
                 <div>Tenor: <span class="font-semibold text-slate-900">{{ $pengajuan->jenisCicilan->lama_cicilan }} bulan</span></div>
                 <div>Asuransi: <span class="font-semibold text-slate-900">{{ $pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi' }}</span></div>
+                <div>Metode bayar: <span class="font-semibold text-slate-900">{{ $pengajuan->metodeBayar?->nama_bank ?? 'Belum dipilih' }}</span></div>
+            </div>
+
+            <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                <div class="flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                    <x-uploaded-image
+                        :src="$pengajuan->asuransi?->logoUrl()"
+                        :alt="$pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi'"
+                        label="AS"
+                        class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                    />
+                    <div>
+                        <p class="font-semibold text-slate-900">{{ $pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi' }}</p>
+                        <p class="mt-1 text-slate-500">Pilihan asuransi</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                    <x-uploaded-image
+                        :src="$pengajuan->metodeBayar?->logoUrl()"
+                        :alt="$pengajuan->metodeBayar?->nama_bank ?? 'Metode bayar'"
+                        label="MB"
+                        class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                    />
+                    <div>
+                        <p class="font-semibold text-slate-900">{{ $pengajuan->metodeBayar?->nama_bank ?? 'Belum dipilih' }}</p>
+                        <p class="mt-1 text-slate-500">{{ $pengajuan->metodeBayar?->nomor_rekening ?? 'Metode bayar' }}</p>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-6 rounded-3xl bg-slate-50 p-5 text-sm text-slate-600">

@@ -4,7 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Angsuran;
+use App\Models\Asuransi;
 use App\Models\Kredit;
+use App\Models\MetodeBayar;
+use App\Models\Motor;
 use App\Support\CreditWorkflow;
 use Illuminate\View\View;
 
@@ -27,6 +30,9 @@ class DashboardController extends Controller
             'angsuranBelumDibayar' => (clone $angsuranQuery)->whereIn('status', [Angsuran::STATUS_MENUNGGU, Angsuran::STATUS_TELAT, Angsuran::STATUS_DITOLAK])->count(),
             'pengajuanTerbaru' => $user->pengajuanKredit()->with(['motor', 'jenisCicilan'])->latest()->take(5)->get(),
             'kreditTerbaru' => $kreditQuery->with(['pengajuanKredit.motor', 'pengiriman'])->latest()->take(3)->get(),
+            'carouselMotors' => Motor::query()->with('jenisMotor')->where('status', Motor::STATUS_TERSEDIA)->latest()->take(5)->get(),
+            'metodeBayarList' => MetodeBayar::query()->where('status', MetodeBayar::STATUS_AKTIF)->latest()->take(4)->get(),
+            'asuransiList' => Asuransi::query()->latest()->take(4)->get(),
         ]);
     }
 }

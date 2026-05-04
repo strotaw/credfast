@@ -15,8 +15,36 @@
                 <div>Tenor: <span class="font-semibold text-slate-900">{{ $pengajuan->jenisCicilan->lama_cicilan }} bulan</span></div>
                 <div>Harga kredit: <span class="font-semibold text-slate-900">Rp {{ number_format($pengajuan->harga_kredit, 0, ',', '.') }}</span></div>
                 <div>Cicilan / bulan: <span class="font-semibold text-slate-900">Rp {{ number_format($pengajuan->cicilan_perbulan, 0, ',', '.') }}</span></div>
+                <div>Asuransi: <span class="font-semibold text-slate-900">{{ $pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi' }}</span></div>
+                <div>Metode bayar: <span class="font-semibold text-slate-900">{{ $pengajuan->metodeBayar?->nama_bank ?? 'Belum dipilih user' }}</span></div>
                 <div>Marketing: <span class="font-semibold text-slate-900">{{ $pengajuan->marketing?->name ?? '-' }}</span></div>
                 <div>Admin: <span class="font-semibold text-slate-900">{{ $pengajuan->admin?->name ?? '-' }}</span></div>
+            </div>
+            <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                <div class="flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                    <x-uploaded-image
+                        :src="$pengajuan->asuransi?->logoUrl()"
+                        :alt="$pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi'"
+                        label="AS"
+                        class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                    />
+                    <div>
+                        <p class="font-semibold text-slate-900">{{ $pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi' }}</p>
+                        <p class="mt-1 text-slate-500">Pilihan asuransi</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                    <x-uploaded-image
+                        :src="$pengajuan->metodeBayar?->logoUrl()"
+                        :alt="$pengajuan->metodeBayar?->nama_bank ?? 'Metode bayar'"
+                        label="MB"
+                        class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                    />
+                    <div>
+                        <p class="font-semibold text-slate-900">{{ $pengajuan->metodeBayar?->nama_bank ?? 'Belum dipilih user' }}</p>
+                        <p class="mt-1 text-slate-500">{{ $pengajuan->metodeBayar?->nomor_rekening ?? 'Metode bayar dari daftar admin' }}</p>
+                    </div>
+                </div>
             </div>
             <div class="mt-6 rounded-3xl bg-slate-50 p-5 text-sm text-slate-600">
                 <p class="font-semibold text-slate-900">Catatan marketing</p>
@@ -47,12 +75,10 @@
                 @csrf
                 <h3 class="section-title">Buat kredit & jadwal angsuran</h3>
                 <div class="mt-4 grid gap-4">
-                    <select name="metode_bayar_id" class="shell-select">
-                        <option value="">Pilih metode bayar</option>
-                        @foreach ($metodeBayar as $metode)
-                            <option value="{{ $metode->id }}">{{ $metode->nama_bank }} - {{ $metode->nomor_rekening }}</option>
-                        @endforeach
-                    </select>
+                    <div class="rounded-3xl border border-slate-200 p-4 text-sm text-slate-600">
+                        Metode bayar mengikuti pilihan user:
+                        <span class="font-semibold text-slate-900">{{ $pengajuan->metodeBayar?->nama_bank ?? 'belum dipilih' }}</span>
+                    </div>
                     <input type="date" name="tgl_mulai_kredit" value="{{ now()->toDateString() }}" class="shell-input">
                     <button class="btn-primary">Buat Kredit</button>
                 </div>

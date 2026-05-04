@@ -21,6 +21,7 @@
         <table class="table-shell">
             <thead class="bg-slate-50">
                 <tr>
+                    <th>Foto</th>
                     <th>Nama</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -31,6 +32,14 @@
             <tbody class="divide-y divide-slate-200 bg-white">
                 @foreach ($users as $item)
                     <tr>
+                        <td>
+                            <x-uploaded-image
+                                :src="$item->fotoUrl()"
+                                :alt="$item->name"
+                                :label="str($item->name)->substr(0, 1)->upper()"
+                                class="h-12 w-12 rounded-2xl object-cover"
+                            />
+                        </td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->email }}</td>
                         <td><span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">{{ strtoupper($item->role) }}</span></td>

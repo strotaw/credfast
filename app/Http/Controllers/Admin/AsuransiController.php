@@ -21,7 +21,7 @@ class AsuransiController extends Controller
     public function create(): View
     {
         return view('admin.asuransi.form', [
-            'item' => new Asuransi(),
+            'item' => new Asuransi,
             'action' => route('admin.asuransi.store'),
             'method' => 'POST',
         ]);
@@ -34,7 +34,7 @@ class AsuransiController extends Controller
             'nama_asuransi' => ['required', 'string', 'max:255'],
             'margin_asuransi' => ['required', 'numeric', 'min:0'],
             'no_rekening' => ['nullable', 'string', 'max:255'],
-            'url_logo' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'url_logo' => $this->imageUploadRules(),
         ]);
 
         $validated['url_logo'] = $this->storePublicFile($request, 'url_logo', 'motor');
@@ -68,7 +68,7 @@ class AsuransiController extends Controller
             'nama_asuransi' => ['required', 'string', 'max:255'],
             'margin_asuransi' => ['required', 'numeric', 'min:0'],
             'no_rekening' => ['nullable', 'string', 'max:255'],
-            'url_logo' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+            'url_logo' => $this->imageUploadRules(),
         ]);
 
         $validated['url_logo'] = $this->storePublicFile($request, 'url_logo', 'motor', $asuransi->url_logo);

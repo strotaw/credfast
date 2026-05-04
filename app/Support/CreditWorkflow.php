@@ -27,6 +27,12 @@ class CreditWorkflow
 
     public static function createKredit(PengajuanKredit $pengajuan, ?MetodeBayar $metodeBayar = null, ?Carbon $startDate = null): Kredit
     {
+        $metodeBayar ??= $pengajuan->metodeBayar;
+
+        if (! $metodeBayar || $metodeBayar->status !== MetodeBayar::STATUS_AKTIF) {
+            throw new RuntimeException('Metode bayar aktif belum dipilih user.');
+        }
+
         if ($pengajuan->status_pengajuan !== PengajuanKredit::STATUS_DITERIMA) {
             throw new RuntimeException('Pengajuan belum disetujui.');
         }

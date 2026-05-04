@@ -7,6 +7,16 @@ use Illuminate\Support\Facades\Storage;
 
 abstract class Controller
 {
+    protected function imageUploadRules(bool $required = false): array
+    {
+        return [
+            $required ? 'required' : 'nullable',
+            'image',
+            'mimes:jpg,jpeg,png,webp',
+            'max:2048',
+        ];
+    }
+
     protected function storePublicFile(Request $request, string $input, string $directory, ?string $existing = null): ?string
     {
         if (! $request->hasFile($input)) {

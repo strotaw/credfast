@@ -3,10 +3,18 @@
 @section('content')
     <div class="mb-6 flex justify-end"><a href="{{ route('admin.metode-bayar.create') }}" class="btn-primary">Tambah Metode Bayar</a></div>
     <div class="shell-card overflow-hidden">
-        <table class="table-shell"><thead class="bg-slate-50"><tr><th>Bank</th><th>Nomor Rekening</th><th>Atas Nama</th><th>Status</th><th></th></tr></thead>
+        <table class="table-shell"><thead class="bg-slate-50"><tr><th>Logo</th><th>Bank</th><th>Nomor Rekening</th><th>Atas Nama</th><th>Status</th><th></th></tr></thead>
             <tbody class="divide-y divide-slate-200 bg-white">
                 @foreach ($items as $item)
                     <tr>
+                        <td>
+                            <x-uploaded-image
+                                :src="$item->logoUrl()"
+                                :alt="$item->nama_bank"
+                                :label="str($item->nama_bank)->substr(0, 2)->upper()"
+                                class="h-14 w-20 rounded-2xl object-contain p-2"
+                            />
+                        </td>
                         <td>{{ $item->nama_bank }}</td>
                         <td>{{ $item->nomor_rekening }}</td>
                         <td>{{ $item->atas_nama }}</td>

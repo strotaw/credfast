@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\HasPublicImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JenisMotor extends Model
 {
-    use HasFactory;
+    use HasFactory, HasPublicImages;
 
     protected $table = 'jenis_motor';
 
@@ -22,5 +23,10 @@ class JenisMotor extends Model
     public function motor(): HasMany
     {
         return $this->hasMany(Motor::class);
+    }
+
+    public function imageUrl(): ?string
+    {
+        return $this->publicImageUrl($this->image_url);
     }
 }

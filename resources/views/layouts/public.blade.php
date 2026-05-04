@@ -13,11 +13,7 @@
         <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
             <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
                 <a href="{{ route('home') }}" class="flex items-center gap-3">
-                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-lg font-bold text-white">CF</div>
-                    <div>
-                        <p class="text-lg font-extrabold text-slate-950">CredFast</p>
-                        <p class="text-xs uppercase tracking-[0.32em] text-slate-400">Motor Credit Platform</p>
-                    </div>
+                    <x-brand-logo subtitle="Motor Credit Platform" />
                 </a>
 
                 <nav class="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-500">

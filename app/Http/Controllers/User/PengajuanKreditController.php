@@ -5,12 +5,14 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Asuransi;
 use App\Models\JenisCicilan;
+use App\Models\MetodeBayar;
 use App\Models\Motor;
 use App\Models\PengajuanKredit;
 use App\Support\ActivityLogger;
 use App\Support\PengajuanService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class PengajuanKreditController extends Controller
@@ -20,7 +22,7 @@ class PengajuanKreditController extends Controller
         return view('user.pengajuan.index', [
             'pengajuanList' => auth()->user()
                 ->pengajuanKredit()
-                ->with(['motor.jenisMotor', 'jenisCicilan', 'asuransi', 'marketing', 'admin', 'kredit'])
+                ->with(['motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'marketing', 'admin', 'kredit'])
                 ->latest()
                 ->paginate(10),
         ]);
@@ -34,6 +36,7 @@ class PengajuanKreditController extends Controller
             'motor' => $motor->load('jenisMotor'),
             'jenisCicilan' => JenisCicilan::query()->orderBy('lama_cicilan')->get(),
             'asuransi' => Asuransi::query()->orderBy('nama_asuransi')->get(),
+            'metodeBayar' => MetodeBayar::query()->where('status', MetodeBayar::STATUS_AKTIF)->orderBy('nama_bank')->get(),
         ]);
     }
 
@@ -43,6 +46,7 @@ class PengajuanKreditController extends Controller
             'motor_id' => ['required', 'exists:motor,id'],
             'jenis_cicilan_id' => ['required', 'exists:jenis_cicilan,id'],
             'asuransi_id' => ['nullable', 'exists:asuransi,id'],
+            'metode_bayar_id' => ['required', Rule::exists('metode_bayar', 'id')->where('status', MetodeBayar::STATUS_AKTIF)],
             'dp' => ['required', 'numeric', 'min:0'],
             'url_kk' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
             'url_ktp' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
@@ -68,6 +72,9 @@ class PengajuanKreditController extends Controller
                 'url_slip_gaji' => $this->storePublicFile($request, 'url_slip_gaji', 'dokumen_pengajuan'),
                 'url_foto' => $this->storePublicFile($request, 'url_foto', 'dokumen_pengajuan'),
             ],
+            [
+                'metode_bayar_id' => $validated['metode_bayar_id'],
+            ],
         );
 
         ActivityLogger::log(auth()->user(), 'buat_pengajuan', 'pengajuan_kredit', $pengajuan->id, 'User mengajukan kredit motor.');
@@ -80,7 +87,7 @@ class PengajuanKreditController extends Controller
         abort_if($pengajuan->user_id !== auth()->id(), 403);
 
         return view('user.pengajuan.show', [
-            'pengajuan' => $pengajuan->load(['motor.jenisMotor', 'jenisCicilan', 'asuransi', 'marketing', 'admin', 'kredit.pengiriman']),
+            'pengajuan' => $pengajuan->load(['motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'marketing', 'admin', 'kredit.pengiriman']),
         ]);
     }
 }

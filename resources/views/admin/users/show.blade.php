@@ -5,8 +5,18 @@
 @section('content')
     <div class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
         <section class="shell-card p-8">
-            <p class="text-sm uppercase tracking-[0.28em] text-slate-400">Identitas</p>
-            <h2 class="mt-2 text-3xl font-semibold">{{ $user->name }}</h2>
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <x-uploaded-image
+                    :src="$user->fotoUrl()"
+                    :alt="$user->name"
+                    :label="str($user->name)->substr(0, 1)->upper()"
+                    class="h-24 w-24 rounded-[26px] object-cover"
+                />
+                <div>
+                    <p class="text-sm uppercase tracking-[0.28em] text-slate-400">Identitas</p>
+                    <h2 class="mt-2 text-3xl font-semibold">{{ $user->name }}</h2>
+                </div>
+            </div>
             <div class="mt-6 space-y-3 text-sm text-slate-600">
                 <div>Email: <span class="font-semibold text-slate-900">{{ $user->email }}</span></div>
                 <div>Role: <span class="font-semibold text-slate-900">{{ strtoupper($user->role) }}</span></div>

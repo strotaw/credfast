@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -12,13 +12,21 @@ class PengajuanKredit extends Model
     use HasFactory;
 
     public const STATUS_MENUNGGU = 'menunggu';
+
     public const STATUS_DIPROSES = 'diproses';
+
     public const STATUS_DATA_KURANG = 'data_kurang';
+
     public const STATUS_SURVEY = 'survey';
+
     public const STATUS_DIREKOMENDASIKAN = 'direkomendasikan';
+
     public const STATUS_TIDAK_DIREKOMENDASIKAN = 'tidak_direkomendasikan';
+
     public const STATUS_DITERIMA = 'diterima';
+
     public const STATUS_DITOLAK = 'ditolak';
+
     public const STATUS_DIBATALKAN_USER = 'dibatalkan_user';
 
     public const STATUS_OPTIONS = [
@@ -40,6 +48,7 @@ class PengajuanKredit extends Model
         'motor_id',
         'jenis_cicilan_id',
         'asuransi_id',
+        'metode_bayar_id',
         'tgl_pengajuan_kredit',
         'harga_cash',
         'dp',
@@ -88,6 +97,11 @@ class PengajuanKredit extends Model
     public function asuransi(): BelongsTo
     {
         return $this->belongsTo(Asuransi::class);
+    }
+
+    public function metodeBayar(): BelongsTo
+    {
+        return $this->belongsTo(MetodeBayar::class);
     }
 
     public function marketing(): BelongsTo

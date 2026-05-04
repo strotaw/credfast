@@ -19,6 +19,34 @@
                 <div>Harga kredit: <span class="font-semibold text-slate-900">Rp {{ number_format($pengajuan->harga_kredit, 0, ',', '.') }}</span></div>
                 <div>Email: <span class="font-semibold text-slate-900">{{ $pengajuan->user->email }}</span></div>
                 <div>Nomor HP: <span class="font-semibold text-slate-900">{{ $pengajuan->user->no_hp ?? '-' }}</span></div>
+                <div>Asuransi: <span class="font-semibold text-slate-900">{{ $pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi' }}</span></div>
+                <div>Metode bayar: <span class="font-semibold text-slate-900">{{ $pengajuan->metodeBayar?->nama_bank ?? '-' }}</span></div>
+            </div>
+            <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                <div class="flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                    <x-uploaded-image
+                        :src="$pengajuan->asuransi?->logoUrl()"
+                        :alt="$pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi'"
+                        label="AS"
+                        class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                    />
+                    <div>
+                        <p class="font-semibold text-slate-900">{{ $pengajuan->asuransi?->nama_asuransi ?? 'Tanpa asuransi' }}</p>
+                        <p class="mt-1 text-slate-500">Pilihan asuransi</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                    <x-uploaded-image
+                        :src="$pengajuan->metodeBayar?->logoUrl()"
+                        :alt="$pengajuan->metodeBayar?->nama_bank ?? 'Metode bayar'"
+                        label="MB"
+                        class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                    />
+                    <div>
+                        <p class="font-semibold text-slate-900">{{ $pengajuan->metodeBayar?->nama_bank ?? '-' }}</p>
+                        <p class="mt-1 text-slate-500">{{ $pengajuan->metodeBayar?->nomor_rekening ?? '-' }}</p>
+                    </div>
+                </div>
             </div>
             <div class="mt-6 rounded-3xl bg-slate-50 p-5 text-sm text-slate-600">
                 <p class="font-semibold text-slate-900">Dokumen</p>

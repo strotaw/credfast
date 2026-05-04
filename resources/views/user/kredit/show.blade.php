@@ -5,6 +5,12 @@
 @section('content')
     <div class="grid gap-6 lg:grid-cols-[1fr_1fr]">
         <section class="shell-card p-8">
+            <x-uploaded-image
+                :src="$kredit->pengajuanKredit->motor->primaryFotoUrl()"
+                :alt="$kredit->pengajuanKredit->motor->nama_motor"
+                label="Motor"
+                class="mb-6 h-56 w-full rounded-[24px] object-cover"
+            />
             <div class="flex items-center justify-between gap-3">
                 <div>
                     <p class="text-sm uppercase tracking-[0.28em] text-slate-400">Kontrak Kredit</p>
@@ -19,6 +25,19 @@
                 <div>Total: <span class="font-semibold text-slate-900">Rp {{ number_format($kredit->total_kredit, 0, ',', '.') }}</span></div>
                 <div>Sisa: <span class="font-semibold text-slate-900">Rp {{ number_format($kredit->sisa_kredit, 0, ',', '.') }}</span></div>
                 <div>Bank: <span class="font-semibold text-slate-900">{{ $kredit->metodeBayar?->nama_bank ?? 'Belum ditentukan' }}</span></div>
+            </div>
+            <div class="mt-6 flex items-center gap-3 rounded-3xl bg-slate-50 p-4 text-sm">
+                <x-uploaded-image
+                    :src="$kredit->metodeBayar?->logoUrl()"
+                    :alt="$kredit->metodeBayar?->nama_bank ?? 'Metode bayar'"
+                    label="MB"
+                    class="h-14 w-16 shrink-0 rounded-2xl object-contain p-2"
+                />
+                <div>
+                    <p class="font-semibold text-slate-900">{{ $kredit->metodeBayar?->nama_bank ?? 'Belum ditentukan' }}</p>
+                    <p class="mt-1 text-slate-500">{{ $kredit->metodeBayar?->nomor_rekening ?? 'Nomor rekening belum tersedia' }}</p>
+                    <p class="mt-1 text-slate-500">{{ $kredit->metodeBayar?->atas_nama ?? '-' }}</p>
+                </div>
             </div>
         </section>
 

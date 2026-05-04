@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" role="img" aria-labelledby="title">
+  <title id="title">CredFast</title>
+  <rect width="220" height="64" rx="18" fill="#0f172a"/>
+  <path d="M22 32c0-11.046 8.954-20 20-20h8c11.046 0 20 8.954 20 20s-8.954 20-20 20h-8c-11.046 0-20-8.954-20-20Z" fill="#38bdf8"/>
+  <path d="M42 21h15l-12 12h12L36 48l8-13H32l10-14Z" fill="#f8fafc"/>
+  <text x="83" y="39" fill="#f8fafc" font-family="Manrope, Segoe UI, Arial, sans-serif" font-size="25" font-weight="800" letter-spacing="0">CredFast</text>
+</svg>

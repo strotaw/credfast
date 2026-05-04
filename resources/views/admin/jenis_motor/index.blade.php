@@ -4,10 +4,18 @@
     <div class="mb-6 flex justify-end"><a href="{{ route('admin.jenis-motor.create') }}" class="btn-primary">Tambah Jenis Motor</a></div>
     <div class="shell-card overflow-hidden">
         <table class="table-shell">
-            <thead class="bg-slate-50"><tr><th>Merk</th><th>Tipe</th><th>Motor</th><th></th></tr></thead>
+            <thead class="bg-slate-50"><tr><th>Gambar</th><th>Merk</th><th>Tipe</th><th>Motor</th><th></th></tr></thead>
             <tbody class="divide-y divide-slate-200 bg-white">
                 @foreach ($items as $item)
                     <tr>
+                        <td>
+                            <x-uploaded-image
+                                :src="$item->imageUrl()"
+                                :alt="$item->merk"
+                                :label="str($item->merk)->substr(0, 2)->upper()"
+                                class="h-16 w-24 rounded-2xl object-cover"
+                            />
+                        </td>
                         <td>{{ $item->merk }}</td>
                         <td>{{ str($item->tipe)->replace('_', ' ')->title() }}</td>
                         <td>{{ $item->motor()->count() }}</td>

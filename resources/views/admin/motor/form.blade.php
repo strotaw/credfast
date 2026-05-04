@@ -22,9 +22,26 @@
                 @endforeach
             </select>
             <div class="md:col-span-2"><textarea name="deskripsi_motor" class="shell-textarea" placeholder="Deskripsi">{{ old('deskripsi_motor', $item->deskripsi_motor) }}</textarea></div>
-            <input type="file" name="foto1" class="shell-input">
-            <input type="file" name="foto2" class="shell-input">
-            <div class="md:col-span-2"><input type="file" name="foto3" class="shell-input"></div>
+            @foreach (['foto1' => 'Foto utama motor', 'foto2' => 'Foto detail motor', 'foto3' => 'Foto tambahan motor'] as $field => $label)
+                <div class="{{ $field === 'foto3' ? 'md:col-span-2' : '' }}">
+                    <label class="mb-2 block text-sm font-medium text-slate-700">{{ $label }}</label>
+                    @if ($item->fotoUrl($field))
+                        <x-uploaded-image
+                            :src="$item->fotoUrl($field)"
+                            :alt="$item->nama_motor"
+                            label="Motor"
+                            class="mb-3 h-36 w-full rounded-[22px] object-cover"
+                        />
+                    @endif
+                    <input
+                        type="file"
+                        name="{{ $field }}"
+                        class="shell-input"
+                        accept="image/jpeg,image/png,image/webp"
+                        @required($field === 'foto1' && ! $item->exists)
+                    >
+                </div>
+            @endforeach
         </div>
         <button class="btn-primary mt-6">Simpan Motor</button>
     </form>

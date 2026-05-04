@@ -6,6 +6,19 @@
     <form method="POST" action="{{ route('user.profil.update') }}" enctype="multipart/form-data" class="shell-card p-8">
         @csrf
         @method('PUT')
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+            <x-uploaded-image
+                :src="$user->fotoUrl()"
+                :alt="$user->name"
+                :label="str($user->name)->substr(0, 1)->upper()"
+                class="h-28 w-28 rounded-[28px] object-cover"
+            />
+            <div>
+                <p class="text-sm uppercase tracking-[0.28em] text-slate-400">Foto profil</p>
+                <h2 class="mt-2 text-2xl font-semibold">{{ $user->name }}</h2>
+                <p class="mt-1 text-sm text-slate-500">{{ $user->email }}</p>
+            </div>
+        </div>
         <div class="grid gap-4 md:grid-cols-2">
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Nama</label>
@@ -45,7 +58,7 @@
             </div>
             <div class="md:col-span-2">
                 <label class="mb-2 block text-sm font-medium text-slate-700">Foto profil</label>
-                <input type="file" name="foto" class="shell-input">
+                <input type="file" name="foto" class="shell-input" accept="image/jpeg,image/png,image/webp">
             </div>
         </div>
         <button class="btn-primary mt-6">Simpan Profil</button>

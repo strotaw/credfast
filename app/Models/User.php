@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Concerns\HasPublicImages;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     public const ROLE_USER = 'user';
+
     public const ROLE_MARKETING = 'marketing';
+
     public const ROLE_ADMIN = 'admin';
+
     public const ROLE_CEO = 'ceo';
 
     public const ROLES = [
@@ -23,7 +27,7 @@ class User extends Authenticatable
     ];
 
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, HasPublicImages, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -68,6 +72,11 @@ class User extends Authenticatable
     public function pengajuanKredit(): HasMany
     {
         return $this->hasMany(PengajuanKredit::class);
+    }
+
+    public function fotoUrl(): ?string
+    {
+        return $this->publicImageUrl($this->foto);
     }
 
     public function verifiedAngsuran(): HasMany

@@ -9,6 +9,16 @@
             @method($method)
         @endif
         <div class="grid gap-4 md:grid-cols-2">
+            @if ($user->fotoUrl())
+                <div class="md:col-span-2">
+                    <x-uploaded-image
+                        :src="$user->fotoUrl()"
+                        :alt="$user->name"
+                        :label="str($user->name)->substr(0, 1)->upper()"
+                        class="h-32 w-32 rounded-[28px] object-cover"
+                    />
+                </div>
+            @endif
             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="shell-input" placeholder="Nama">
             <input type="email" name="email" value="{{ old('email', $user->email) }}" class="shell-input" placeholder="Email">
             <select name="role" class="shell-select">
@@ -22,7 +32,10 @@
             <input type="text" name="kota" value="{{ old('kota', $user->kota) }}" class="shell-input" placeholder="Kota">
             <input type="text" name="provinsi" value="{{ old('provinsi', $user->provinsi) }}" class="shell-input" placeholder="Provinsi">
             <input type="text" name="kode_pos" value="{{ old('kode_pos', $user->kode_pos) }}" class="shell-input" placeholder="Kode Pos">
-            <input type="file" name="foto" class="shell-input">
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Foto profil user</label>
+                <input type="file" name="foto" class="shell-input" accept="image/jpeg,image/png,image/webp">
+            </div>
             <div class="md:col-span-2">
                 <textarea name="alamat" class="shell-textarea" placeholder="Alamat">{{ old('alamat', $user->alamat) }}</textarea>
             </div>

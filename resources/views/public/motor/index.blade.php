@@ -30,6 +30,12 @@
             <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 @foreach ($motors as $motor)
                     <article class="shell-card p-6">
+                        <x-uploaded-image
+                            :src="$motor->primaryFotoUrl()"
+                            :alt="$motor->nama_motor"
+                            label="Motor"
+                            class="mb-5 h-48 w-full rounded-[24px] object-cover"
+                        />
                         <div class="flex items-start justify-between gap-4">
                             <div>
                                 <p class="text-sm uppercase tracking-[0.25em] text-slate-400">{{ $motor->jenisMotor->merk }}</p>

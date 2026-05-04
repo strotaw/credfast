@@ -71,13 +71,35 @@
                 <label class="mb-2 block text-sm font-medium text-slate-700">DP</label>
                 <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input">
             </div>
+            <div class="lg:col-span-2">
+                <label class="mb-2 block text-sm font-medium text-slate-700">Metode bayar pilihan pelanggan</label>
+                <select name="metode_bayar_id" class="shell-select">
+                    <option value="">Pilih metode bayar</option>
+                    @foreach ($metodeBayar as $item)
+                        <option value="{{ $item->id }}" @selected(old('metode_bayar_id') == $item->id)>{{ $item->nama_bank }} - {{ $item->nomor_rekening }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
         <div class="mt-5 grid gap-4 md:grid-cols-2">
-            <input type="file" name="url_kk" class="shell-input">
-            <input type="file" name="url_ktp" class="shell-input">
-            <input type="file" name="url_npwp" class="shell-input">
-            <input type="file" name="url_slip_gaji" class="shell-input">
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Dokumen KK pelanggan</label>
+                <input type="file" name="url_kk" class="shell-input">
+            </div>
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Dokumen KTP pelanggan</label>
+                <input type="file" name="url_ktp" class="shell-input">
+            </div>
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Dokumen NPWP pelanggan</label>
+                <input type="file" name="url_npwp" class="shell-input">
+            </div>
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Dokumen slip gaji pelanggan</label>
+                <input type="file" name="url_slip_gaji" class="shell-input">
+            </div>
             <div class="md:col-span-2">
+                <label class="mb-2 block text-sm font-medium text-slate-700">Foto diri pelanggan</label>
                 <input type="file" name="url_foto" class="shell-input">
             </div>
         </div>
