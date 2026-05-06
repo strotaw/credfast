@@ -88,6 +88,21 @@
                     <p class="mt-3 text-sm text-slate-500">Data kredit akan dibuat admin setelah pengajuan disetujui.</p>
                 @endif
             </div>
+
+            <div class="shell-card p-8">
+                <h3 class="section-title">Status pengiriman motor</h3>
+                @if ($pengajuan->kredit?->pengiriman)
+                    <div class="mt-4 space-y-3 text-sm text-slate-600">
+                        <div>No. invoice: <span class="font-semibold text-slate-900">{{ $pengajuan->kredit->pengiriman->no_invoice }}</span></div>
+                        <div>Status: <x-status-badge :status="$pengajuan->kredit->pengiriman->status_kirim" kirim /></div>
+                        <div>Kurir: <span class="font-semibold text-slate-900">{{ $pengajuan->kredit->pengiriman->nama_kurir ?? 'Belum ditentukan' }}</span></div>
+                        <div>Tanggal kirim: <span class="font-semibold text-slate-900">{{ $pengajuan->kredit->pengiriman->tgl_kirim?->format('d M Y H:i') ?? '-' }}</span></div>
+                        <div>Tanggal tiba: <span class="font-semibold text-slate-900">{{ $pengajuan->kredit->pengiriman->tgl_tiba?->format('d M Y H:i') ?? '-' }}</span></div>
+                    </div>
+                @else
+                    <p class="mt-3 text-sm text-slate-500">Status pengiriman muncul setelah pengajuan disetujui admin.</p>
+                @endif
+            </div>
         </section>
     </div>
 @endsection

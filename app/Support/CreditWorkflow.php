@@ -77,7 +77,8 @@ class CreditWorkflow
             Pengiriman::create([
                 'kredit_id' => $kredit->id,
                 'no_invoice' => self::generateInvoiceNumber(),
-                'status_kirim' => Pengiriman::STATUS_DIPROSES,
+                'tgl_kirim' => now(),
+                'status_kirim' => Pengiriman::STATUS_DIKIRIM,
             ]);
 
             $motor->decrement('stok');

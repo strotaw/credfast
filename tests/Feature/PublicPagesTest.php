@@ -37,7 +37,13 @@ class PublicPagesTest extends TestCase
             ->assertSee('CredFast')
             ->assertSee('Apa itu CredFast?')
             ->assertSee('Motor yang tersedia')
-            ->assertSee('Honda Vario Test');
+            ->assertSee('Honda Vario Test')
+            ->assertSee('Kredit motor cepat, jelas, dan mudah dipantau')
+            ->assertSee('+6283875223935')
+            ->assertSee('akmalzahir931@gmail.com')
+            ->assertDontSee('Motor Credit Platform')
+            ->assertDontSee('Kredit motor terstruktur untuk dealer dan pelanggan.')
+            ->assertDontSee('support@credfast.test');
     }
 
     public function test_simulasi_page_loads_with_motor_query(): void

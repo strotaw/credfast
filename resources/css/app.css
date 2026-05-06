@@ -71,6 +71,13 @@
         @apply inline-flex items-center justify-center rounded-2xl bg-rose-600 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-rose-700;
     }
 
+    .btn-primary:disabled,
+    .btn-secondary:disabled,
+    .btn-success:disabled,
+    .btn-danger:disabled {
+        @apply cursor-not-allowed opacity-50 hover:translate-y-0;
+    }
+
     .metric-card {
         @apply rounded-[28px] border border-white/80 bg-white/95 p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)];
     }

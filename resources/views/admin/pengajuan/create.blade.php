@@ -4,13 +4,13 @@
     <form method="POST" action="{{ route('admin.pengajuan.offline.store') }}" enctype="multipart/form-data" class="shell-card p-8">
         @csrf
         <div class="grid gap-4 lg:grid-cols-2">
-            <input type="text" name="name" value="{{ old('name') }}" class="shell-input" placeholder="Masukkan nama pelanggan">
-            <input type="email" name="email" value="{{ old('email') }}" class="shell-input" placeholder="Masukkan email pelanggan">
-            <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="shell-input" placeholder="Masukkan nomor HP pelanggan">
-            <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="shell-input" placeholder="Masukkan kode pos pelanggan">
-            <input type="text" name="kota" value="{{ old('kota') }}" class="shell-input" placeholder="Masukkan kota pelanggan">
-            <input type="text" name="provinsi" value="{{ old('provinsi') }}" class="shell-input" placeholder="Masukkan provinsi pelanggan">
-            <div class="lg:col-span-2"><textarea name="alamat" class="shell-textarea" placeholder="Masukkan alamat lengkap pelanggan">{{ old('alamat') }}</textarea></div>
+            <input type="text" name="name" value="{{ old('name') }}" class="shell-input" placeholder="Nama pelanggan">
+            <input type="email" name="email" value="{{ old('email') }}" class="shell-input" placeholder="Email">
+            <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="shell-input" placeholder="Nomor HP">
+            <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="shell-input" placeholder="Kode pos">
+            <input type="text" name="kota" value="{{ old('kota') }}" class="shell-input" placeholder="Kota">
+            <input type="text" name="provinsi" value="{{ old('provinsi') }}" class="shell-input" placeholder="Provinsi">
+            <div class="lg:col-span-2"><textarea name="alamat" class="shell-textarea" placeholder="Alamat">{{ old('alamat') }}</textarea></div>
             <select name="motor_id" class="shell-select">@foreach ($motors as $motor)<option value="{{ $motor->id }}">{{ $motor->nama_motor }} - Rp {{ number_format($motor->harga_jual, 0, ',', '.') }}</option>@endforeach</select>
             <select name="jenis_cicilan_id" class="shell-select">@foreach ($jenisCicilan as $item)<option value="{{ $item->id }}">{{ $item->lama_cicilan }} bulan</option>@endforeach</select>
             <select name="asuransi_id" class="shell-select"><option value="">Tanpa asuransi</option>@foreach ($asuransi as $item)<option value="{{ $item->id }}">{{ $item->nama_asuransi }}</option>@endforeach</select>
@@ -20,7 +20,7 @@
                     <option value="{{ $item->id }}" @selected(old('metode_bayar_id') == $item->id)>{{ $item->nama_bank }} - {{ $item->nomor_rekening }}</option>
                 @endforeach
             </select>
-            <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input" placeholder="Masukkan nominal down payment pelanggan">
+            <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input" placeholder="DP">
         </div>
         <div class="mt-5 grid gap-4 md:grid-cols-2">
             <div>

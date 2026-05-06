@@ -5,13 +5,13 @@
         @csrf
         @if ($method !== 'POST') @method($method) @endif
         <div class="grid gap-4 md:grid-cols-2">
-            <input type="text" name="merk" value="{{ old('merk', $item->merk) }}" class="shell-input" placeholder="Masukkan merk motor">
+            <input type="text" name="merk" value="{{ old('merk', $item->merk) }}" class="shell-input" placeholder="Merk motor">
             <select name="tipe" class="shell-select">
                 @foreach ($types as $type)
                     <option value="{{ $type }}" @selected(old('tipe', $item->tipe) === $type)>{{ str($type)->replace('_', ' ')->title() }}</option>
                 @endforeach
             </select>
-            <div class="md:col-span-2"><textarea name="deskripsi_jenis" class="shell-textarea" placeholder="Masukkan deskripsi jenis motor">{{ old('deskripsi_jenis', $item->deskripsi_jenis) }}</textarea></div>
+            <div class="md:col-span-2"><textarea name="deskripsi_jenis" class="shell-textarea" placeholder="Deskripsi">{{ old('deskripsi_jenis', $item->deskripsi_jenis) }}</textarea></div>
             <div class="md:col-span-2">
                 <label class="mb-2 block text-sm font-medium text-slate-700">Gambar jenis motor</label>
                 @if ($item->imageUrl())

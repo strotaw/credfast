@@ -11,7 +11,7 @@
             </div>
 
             <form method="GET" class="grid gap-3 sm:grid-cols-3">
-                <input type="text" name="q" value="{{ request('q') }}" class="shell-input" placeholder="Cari motor berdasarkan nama">
+                <input type="text" name="q" value="{{ request('q') }}" class="shell-input" placeholder="Cari motor">
                 <select name="jenis_motor_id" class="shell-select">
                     <option value="">Semua jenis</option>
                     @foreach ($jenisMotors as $jenis)

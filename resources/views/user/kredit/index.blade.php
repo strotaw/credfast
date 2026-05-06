@@ -13,6 +13,7 @@
                         <th>No. Kontrak</th>
                         <th>Motor</th>
                         <th>Status</th>
+                        <th>Pengiriman</th>
                         <th>Total Kredit</th>
                         <th>Sisa</th>
                         <th></th>
@@ -24,6 +25,7 @@
                             <td>{{ $item->no_kontrak }}</td>
                             <td>{{ $item->pengajuanKredit->motor->nama_motor }}</td>
                             <td><x-status-badge :status="$item->status_kredit" /></td>
+                            <td>@if ($item->pengiriman)<x-status-badge :status="$item->pengiriman->status_kirim" kirim />@else - @endif</td>
                             <td>Rp {{ number_format($item->total_kredit, 0, ',', '.') }}</td>
                             <td>Rp {{ number_format($item->sisa_kredit, 0, ',', '.') }}</td>
                             <td><a href="{{ route('user.kredit.show', $item) }}" class="btn-secondary">Detail</a></td>

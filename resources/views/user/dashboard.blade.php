@@ -3,7 +3,7 @@
 @section('page-title', 'User Dashboard')
 
 @section('content')
-    <x-motor-carousel :motors="$carouselMotors" eyebrow="Rekomendasi katalog" subtitle="Pilih motor, simulasi, lalu ajukan dari portal user" />
+    <x-motor-carousel :motors="$carouselMotors" />
 
     <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <x-stat-card title="Total Pengajuan" :value="$totalPengajuan" />
@@ -75,7 +75,7 @@
                         </div>
                         <div class="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-600">
                             <div>Sisa kredit: <span class="font-semibold text-slate-900">Rp {{ number_format($item->sisa_kredit, 0, ',', '.') }}</span></div>
-                            <div>Pengiriman: <span class="font-semibold text-slate-900">{{ optional($item->pengiriman)->status_kirim ? str(optional($item->pengiriman)->status_kirim)->title() : '-' }}</span></div>
+                            <div>Pengiriman: <span class="font-semibold text-slate-900">@if ($item->pengiriman)<x-status-badge :status="$item->pengiriman->status_kirim" kirim />@else - @endif</span></div>
                         </div>
                         <a href="{{ route('user.kredit.show', $item) }}" class="btn-secondary mt-4">Lihat Kredit</a>
                     </div>

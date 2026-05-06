@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Asuransi;
 use App\Models\JenisCicilan;
+use App\Models\Kredit;
 use App\Models\MetodeBayar;
 use App\Models\Motor;
 use App\Models\PengajuanKredit;
+use App\Models\Pengiriman;
 use App\Support\CreditWorkflow;
 use App\Support\PengajuanService;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use RuntimeException;
@@ -41,53 +43,79 @@ class PengajuanKreditController extends Controller
         ]);
     }
 
-    public function approve(Request $request, PengajuanKredit $pengajuan): RedirectResponse
+    public function approve(PengajuanKredit $pengajuan): RedirectResponse
     {
-        $validated = $request->validate([
-            'keterangan_status_pengajuan' => ['nullable', 'string'],
-        ]);
+        if ($pengajuan->status_pengajuan === PengajuanKredit::STATUS_DITERIMA) {
+            return back()->withErrors(['approve' => 'Pengajuan sudah di-approve.']);
+        }
 
-        $pengajuan->update([
-            'status_pengajuan' => PengajuanKredit::STATUS_DITERIMA,
-            'admin_id' => auth()->id(),
-            'keterangan_status_pengajuan' => $validated['keterangan_status_pengajuan'] ?? 'Disetujui admin.',
-        ]);
+        try {
+            $kredit = DB::transaction(function () use ($pengajuan) {
+                $pengajuan->update([
+                    'status_pengajuan' => PengajuanKredit::STATUS_DITERIMA,
+                    'admin_id' => auth()->id(),
+                    'keterangan_status_pengajuan' => null,
+                ]);
 
-        return back()->with('success', 'Pengajuan berhasil disetujui.');
+                if ($pengajuan->kredit()->exists()) {
+                    $kredit = $pengajuan->kredit()->firstOrFail();
+                    $kredit->update([
+                        'status_kredit' => Kredit::STATUS_AKTIF,
+                        'keterangan_status_kredit' => null,
+                    ]);
+                    $kredit->pengiriman()->updateOrCreate(
+                        ['kredit_id' => $kredit->id],
+                        [
+                            'no_invoice' => $kredit->pengiriman?->no_invoice ?? CreditWorkflow::generateInvoiceNumber(),
+                            'tgl_kirim' => now(),
+                            'status_kirim' => Pengiriman::STATUS_DIKIRIM,
+                        ],
+                    );
+
+                    return $kredit;
+                }
+
+                return CreditWorkflow::createKredit($pengajuan->fresh(['motor', 'jenisCicilan', 'metodeBayar']));
+            });
+        } catch (RuntimeException $exception) {
+            return back()->withErrors(['approve' => $exception->getMessage()]);
+        }
+
+        return redirect()->route('admin.kredit.show', $kredit)->with('success', 'Pengajuan disetujui. Kredit dan jadwal angsuran otomatis dibuat.');
     }
 
     public function reject(Request $request, PengajuanKredit $pengajuan): RedirectResponse
     {
-        $validated = $request->validate([
-            'keterangan_status_pengajuan' => ['required', 'string'],
-        ]);
-
-        $pengajuan->update([
-            'status_pengajuan' => PengajuanKredit::STATUS_DIBATALKAN_PENJUAL,
-            'admin_id' => auth()->id(),
-            'keterangan_status_pengajuan' => $validated['keterangan_status_pengajuan'],
-        ]);
-
-        return back()->with('success', 'Pengajuan berhasil dibatalkan penjual.');
-    }
-
-    public function buatKredit(Request $request, PengajuanKredit $pengajuan): RedirectResponse
-    {
-        $validated = $request->validate([
-            'tgl_mulai_kredit' => ['nullable', 'date'],
-        ]);
-
-        try {
-            $kredit = CreditWorkflow::createKredit(
-                $pengajuan->load(['motor', 'jenisCicilan', 'metodeBayar']),
-                null,
-                $request->filled('tgl_mulai_kredit') ? Carbon::parse($validated['tgl_mulai_kredit']) : null,
-            );
-        } catch (RuntimeException $exception) {
-            return back()->withErrors(['buat_kredit' => $exception->getMessage()]);
+        if ($pengajuan->status_pengajuan === PengajuanKredit::STATUS_DIBATALKAN_PENJUAL) {
+            return back()->withErrors(['reject' => 'Pengajuan sudah dibatalkan penjual.']);
         }
 
-        return redirect()->route('admin.kredit.show', $kredit)->with('success', 'Kredit dan jadwal angsuran berhasil dibuat.');
+        $validated = $request->validate([
+            'keterangan_status_pengajuan' => ['nullable', 'string'],
+        ]);
+
+        $keterangan = ($validated['keterangan_status_pengajuan'] ?? null) ?: 'Dibatalkan penjual.';
+
+        DB::transaction(function () use ($pengajuan, $keterangan) {
+            $pengajuan->update([
+                'status_pengajuan' => PengajuanKredit::STATUS_DIBATALKAN_PENJUAL,
+                'admin_id' => auth()->id(),
+                'keterangan_status_pengajuan' => $keterangan,
+            ]);
+
+            if ($pengajuan->kredit()->exists()) {
+                $kredit = $pengajuan->kredit()->with('pengiriman')->firstOrFail();
+                $this->deletePublicFile($kredit->pengiriman?->bukti_foto);
+                $kredit->pengiriman?->delete();
+
+                $kredit->update([
+                    'status_kredit' => Kredit::STATUS_DIBATALKAN,
+                    'keterangan_status_kredit' => $keterangan,
+                ]);
+            }
+        });
+
+        return back()->with('success', 'Pengajuan berhasil dibatalkan penjual.');
     }
 
     public function createOffline(): View

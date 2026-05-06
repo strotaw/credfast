@@ -28,8 +28,19 @@
     $normalized = $status === 'diterima' && isset($kirim) ? 'diterima-kirim' : $normalized;
     $normalized = $status === 'aktif' && isset($bank) ? 'aktif-bank' : $normalized;
     $normalized = $status === 'nonaktif' && isset($bank) ? 'nonaktif-bank' : $normalized;
+    $labels = [
+        'menunggu_konfirmasi' => 'Menunggu Konfirmasi',
+        'dibatalkan_pembeli' => 'Dibatalkan Pembeli',
+        'dibatalkan_penjual' => 'Dibatalkan Penjual',
+        'diterima' => 'Disetujui',
+        'diproses-kirim' => 'Diproses',
+        'dikirim' => 'Sedang Dikirim',
+        'diterima-kirim' => 'Sudah Tiba di Tujuan',
+        'aktif-bank' => 'Aktif',
+        'nonaktif-bank' => 'Nonaktif',
+    ];
 @endphp
 
 <span {{ $attributes->merge(['class' => 'inline-flex rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset '.($map[$normalized] ?? 'bg-slate-100 text-slate-700 ring-slate-200')]) }}>
-    {{ str($status)->replace('_', ' ')->title() }}
+    {{ $labels[$normalized] ?? str($status)->replace('_', ' ')->title() }}
 </span>

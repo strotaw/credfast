@@ -8,7 +8,7 @@
         <x-stat-card title="Pendapatan Valid" :value="'Rp '.number_format($totalRevenue, 0, ',', '.')" />
         <x-stat-card title="Kredit Aktif" :value="$totalKreditAktif" />
         <x-stat-card title="Kredit Macet" :value="$totalKreditMacet" />
-        <x-stat-card title="Pengajuan Diterima" :value="$totalPengajuanDiterima" />
+        <x-stat-card title="Pengajuan Disetujui" :value="$totalPengajuanDiterima" />
     </div>
 
     <div class="mt-8 grid gap-6 xl:grid-cols-[1fr_1fr]">

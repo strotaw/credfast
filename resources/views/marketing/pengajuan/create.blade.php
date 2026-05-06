@@ -8,39 +8,39 @@
         <div class="grid gap-4 lg:grid-cols-2">
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Nama pelanggan</label>
-                <input type="text" name="name" value="{{ old('name') }}" class="shell-input" placeholder="Masukkan nama pelanggan">
+                    <input type="text" name="name" value="{{ old('name') }}" class="shell-input" placeholder="Nama pelanggan">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Email pelanggan</label>
-                <input type="email" name="email" value="{{ old('email') }}" class="shell-input" placeholder="Masukkan email pelanggan">
+                    <input type="email" name="email" value="{{ old('email') }}" class="shell-input" placeholder="Email">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">No. HP</label>
-                <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="shell-input" placeholder="Masukkan nomor HP pelanggan">
+                    <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="shell-input" placeholder="Nomor HP">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Password awal</label>
-                <input type="password" name="password" class="shell-input" placeholder="Masukkan password awal jika ingin dibuat manual">
+                    <input type="password" name="password" class="shell-input" placeholder="Password awal">
             </div>
             <div class="lg:col-span-2">
                 <label class="mb-2 block text-sm font-medium text-slate-700">Alamat</label>
-                <textarea name="alamat" class="shell-textarea" placeholder="Masukkan alamat lengkap pelanggan">{{ old('alamat') }}</textarea>
+                    <textarea name="alamat" class="shell-textarea" placeholder="Alamat">{{ old('alamat') }}</textarea>
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Kota</label>
-                <input type="text" name="kota" value="{{ old('kota') }}" class="shell-input" placeholder="Masukkan kota pelanggan">
+                    <input type="text" name="kota" value="{{ old('kota') }}" class="shell-input" placeholder="Kota">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Provinsi</label>
-                <input type="text" name="provinsi" value="{{ old('provinsi') }}" class="shell-input" placeholder="Masukkan provinsi pelanggan">
+                    <input type="text" name="provinsi" value="{{ old('provinsi') }}" class="shell-input" placeholder="Provinsi">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Kode Pos</label>
-                <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="shell-input" placeholder="Masukkan kode pos pelanggan">
+                    <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="shell-input" placeholder="Kode pos">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Konfirmasi Password</label>
-                <input type="password" name="password_confirmation" class="shell-input" placeholder="Ulangi password awal pelanggan">
+                    <input type="password" name="password_confirmation" class="shell-input" placeholder="Konfirmasi password">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Motor</label>
@@ -69,7 +69,7 @@
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">DP</label>
-                <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input" placeholder="Masukkan nominal DP pelanggan">
+                <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input" placeholder="DP">
             </div>
             <div class="lg:col-span-2">
                 <label class="mb-2 block text-sm font-medium text-slate-700">Metode bayar pilihan pelanggan</label>

@@ -2,7 +2,7 @@
 @section('page-title', 'Kelola Motor')
 @section('content')
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <form method="GET"><input type="text" name="q" value="{{ request('q') }}" class="shell-input" placeholder="Cari motor berdasarkan nama"></form>
+        <form method="GET"><input type="text" name="q" value="{{ request('q') }}" class="shell-input" placeholder="Cari motor"></form>
         <a href="{{ route('admin.motor.create') }}" class="btn-primary">Tambah Motor</a>
     </div>
     <div class="shell-card overflow-hidden">

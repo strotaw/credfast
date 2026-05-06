@@ -97,7 +97,7 @@
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-medium text-slate-700">Down Payment</label>
-                    <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input" placeholder="Masukkan nominal down payment" required>
+                        <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input" placeholder="DP" required>
                 </div>
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>

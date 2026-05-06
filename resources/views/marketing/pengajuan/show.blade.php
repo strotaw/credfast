@@ -83,7 +83,7 @@
                             <option value="{{ $status }}" @selected($pengajuan->status_pengajuan === $status)>{{ str($status)->replace('_', ' ')->title() }}</option>
                         @endforeach
                     </select>
-                    <textarea name="keterangan_status_pengajuan" class="shell-textarea" placeholder="Masukkan alasan perubahan status pengajuan">{{ old('keterangan_status_pengajuan', $pengajuan->keterangan_status_pengajuan) }}</textarea>
+                    <textarea name="keterangan_status_pengajuan" class="shell-textarea" placeholder="Keterangan">{{ old('keterangan_status_pengajuan', $pengajuan->keterangan_status_pengajuan) }}</textarea>
                     <button class="btn-primary">Simpan Status</button>
                 </div>
             </form>
@@ -93,8 +93,8 @@
                 @method('PUT')
                 <h3 class="section-title">Catatan marketing</h3>
                 <div class="mt-5 grid gap-4">
-                    <textarea name="catatan_marketing" class="shell-textarea" placeholder="Masukkan hasil follow-up, observasi, dan rekomendasi">{{ old('catatan_marketing', $pengajuan->catatan_marketing) }}</textarea>
-                    <textarea name="keterangan_status_pengajuan" class="shell-textarea" placeholder="Masukkan ringkasan tambahan untuk status pengajuan">{{ old('keterangan_status_pengajuan', $pengajuan->keterangan_status_pengajuan) }}</textarea>
+                    <textarea name="catatan_marketing" class="shell-textarea" placeholder="Catatan">{{ old('catatan_marketing', $pengajuan->catatan_marketing) }}</textarea>
+                    <textarea name="keterangan_status_pengajuan" class="shell-textarea" placeholder="Keterangan">{{ old('keterangan_status_pengajuan', $pengajuan->keterangan_status_pengajuan) }}</textarea>
                     <button class="btn-success">Simpan Catatan</button>
                 </div>
             </form>

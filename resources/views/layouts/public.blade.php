@@ -13,7 +13,7 @@
         <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
             <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
                 <a href="{{ route('home') }}" class="flex items-center gap-3">
-                    <x-brand-logo subtitle="Motor Credit Platform" />
+                    <x-brand-logo />
                 </a>
 
                 <nav class="flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-500">
@@ -50,27 +50,16 @@
             @yield('content')
         </main>
 
-        <footer class="border-t border-slate-200/80 bg-white/90">
-            <div class="mx-auto grid max-w-7xl gap-8 px-6 py-10 text-sm text-slate-500 lg:grid-cols-[1.15fr_0.85fr_0.85fr]">
+        <footer class="relative border-t border-slate-200/80 bg-white/85">
+            <div class="mx-auto grid max-w-7xl gap-5 px-6 py-8 text-sm text-slate-500 md:grid-cols-[1.2fr_0.8fr] md:items-center">
                 <div>
                     <p class="text-xs uppercase tracking-[0.32em] text-slate-400">CredFast</p>
-                    <p class="mt-3 max-w-xl leading-7">Kredit motor terstruktur untuk dealer dan pelanggan.</p>
+                    <p class="mt-3 max-w-2xl leading-7">Kredit motor cepat, jelas, dan mudah dipantau dari pengajuan sampai angsuran.</p>
                 </div>
-                <div>
-                    <p class="font-semibold text-slate-900">Akses cepat</p>
-                    <div class="mt-3 space-y-2">
-                        <p><a href="{{ route('public.motor') }}" class="hover:text-slate-950">Katalog Motor</a></p>
-                        <p><a href="{{ route('public.simulasi') }}" class="hover:text-slate-950">Simulasi Kredit</a></p>
-                        <p><a href="{{ route('register') }}" class="hover:text-slate-950">Daftar User</a></p>
-                    </div>
-                </div>
-                <div>
-                    <p class="font-semibold text-slate-900">Kontak</p>
-                    <div class="mt-3 space-y-2">
-                        <p>021-55667788</p>
-                        <p>support@credfast.test</p>
-                        <p>Jakarta Pusat</p>
-                    </div>
+                <div class="space-y-2 md:text-right">
+                    <p class="font-semibold text-slate-900">Kontak CredFast</p>
+                    <p>+6283875223935</p>
+                    <p>akmalzahir931@gmail.com</p>
                 </div>
             </div>
         </footer>

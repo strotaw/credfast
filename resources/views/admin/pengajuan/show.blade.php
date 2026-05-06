@@ -10,6 +10,8 @@
         $customerAddress = collect([$pelanggan?->alamat1 ?? $customer?->alamat, $pelanggan?->kota1 ?? $customer?->kota, $pelanggan?->propinsi1 ?? $customer?->provinsi, $pelanggan?->kodepos1 ?? $customer?->kode_pos])
             ->filter()
             ->implode(', ');
+        $approveDisabled = $pengajuan->status_pengajuan === \App\Models\PengajuanKredit::STATUS_DITERIMA;
+        $rejectDisabled = $pengajuan->status_pengajuan === \App\Models\PengajuanKredit::STATUS_DIBATALKAN_PENJUAL;
     @endphp
 
     <div class="grid gap-6 xl:grid-cols-[1fr_1fr]">
@@ -83,29 +85,22 @@
                 @csrf
                 @method('PUT')
                 <h3 class="section-title">Approve pengajuan</h3>
-                <textarea name="keterangan_status_pengajuan" class="shell-textarea mt-4" placeholder="Masukkan catatan persetujuan pengajuan">Disetujui admin.</textarea>
-                <button class="btn-success mt-4">Approve</button>
+                <button class="btn-success mt-4" @disabled($approveDisabled)>Approve</button>
             </form>
+
+            @if ($pengajuan->kredit)
+                <div class="shell-card p-8">
+                    <h3 class="section-title">Kredit {{ str($pengajuan->kredit->status_kredit)->title() }}</h3>
+                    <a href="{{ route('admin.kredit.show', $pengajuan->kredit) }}" class="btn-primary mt-4">Lihat Kredit</a>
+                </div>
+            @endif
 
             <form method="POST" action="{{ route('admin.pengajuan.reject', $pengajuan) }}" class="shell-card p-8">
                 @csrf
                 @method('PUT')
                 <h3 class="section-title">Batalkan oleh penjual</h3>
-                <textarea name="keterangan_status_pengajuan" class="shell-textarea mt-4" placeholder="Masukkan alasan pembatalan oleh penjual"></textarea>
-                <button class="btn-danger mt-4">Batalkan</button>
-            </form>
-
-            <form method="POST" action="{{ route('admin.pengajuan.buat-kredit', $pengajuan) }}" class="shell-card p-8">
-                @csrf
-                <h3 class="section-title">Buat kredit & jadwal angsuran</h3>
-                <div class="mt-4 grid gap-4">
-                    <div class="rounded-3xl border border-slate-200 p-4 text-sm text-slate-600">
-                        Metode bayar mengikuti pilihan user:
-                        <span class="font-semibold text-slate-900">{{ $pengajuan->metodeBayar?->nama_bank ?? 'belum dipilih' }}</span>
-                    </div>
-                    <input type="date" name="tgl_mulai_kredit" value="{{ now()->toDateString() }}" class="shell-input" placeholder="Pilih tanggal mulai kredit">
-                    <button class="btn-primary">Buat Kredit</button>
-                </div>
+                <textarea name="keterangan_status_pengajuan" class="shell-textarea mt-4" placeholder="Keterangan" @disabled($rejectDisabled)></textarea>
+                <button class="btn-danger mt-4" @disabled($rejectDisabled)>Batalkan</button>
             </form>
         </div>
     </div>

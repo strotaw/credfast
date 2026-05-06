@@ -8,7 +8,7 @@
         <x-stat-card title="Diproses" :value="$processedCount" />
         <x-stat-card title="Dibatalkan Pembeli" :value="$cancelledBuyerCount" />
         <x-stat-card title="Bermasalah" :value="$problemCount" />
-        <x-stat-card title="Diterima" :value="$acceptedCount" />
+        <x-stat-card title="Disetujui" :value="$acceptedCount" />
     </div>
 
     <section class="shell-card mt-8 overflow-hidden">

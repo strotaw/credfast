@@ -41,13 +41,63 @@ class AuthAndRoleTest extends TestCase
         $response->assertForbidden();
     }
 
+    public function test_user_portal_footer_shows_credfast_contact(): void
+    {
+        $user = User::factory()->create(['role' => User::ROLE_USER]);
+        $user->syncPelangganProfile();
+
+        $this->actingAs($user)
+            ->get(route('user.dashboard'))
+            ->assertOk()
+            ->assertSee('Kredit motor cepat, jelas, dan mudah dipantau')
+            ->assertSee('+6283875223935')
+            ->assertSee('akmalzahir931@gmail.com')
+            ->assertDontSee('Pilih motor, simulasi')
+            ->assertDontSee('Rekomendasi katalog')
+            ->assertDontSee('Portal User')
+            ->assertDontSee('Customer Portal')
+            ->assertDontSee('Akun aktif')
+            ->assertDontSee('Status portal');
+    }
+
     public function test_admin_user_can_open_admin_dashboard(): void
     {
         $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
 
         $response = $this->actingAs($admin)->get(route('admin.dashboard'));
 
-        $response->assertOk();
+        $response
+            ->assertOk()
+            ->assertDontSee('ADMIN panel')
+            ->assertDontSee('Admin Workspace')
+            ->assertDontSee('Signed in')
+            ->assertDontSee('Today');
+    }
+
+    public function test_marketing_dashboard_hides_decorative_panel_labels(): void
+    {
+        $marketing = User::factory()->create(['role' => User::ROLE_MARKETING]);
+
+        $this->actingAs($marketing)
+            ->get(route('marketing.dashboard'))
+            ->assertOk()
+            ->assertDontSee('MARKETING panel')
+            ->assertDontSee('Marketing Workspace')
+            ->assertDontSee('Signed in')
+            ->assertDontSee('Today');
+    }
+
+    public function test_auth_layout_hides_decorative_access_labels(): void
+    {
+        $this->get(route('login'))
+            ->assertOk()
+            ->assertDontSee('Account Access')
+            ->assertDontSee('CredFast Access');
+
+        $this->get(route('register'))
+            ->assertOk()
+            ->assertDontSee('Account Access')
+            ->assertDontSee('CredFast Access');
     }
 
     public function test_ceo_only_opens_sales_report_area(): void
@@ -67,7 +117,11 @@ class AuthAndRoleTest extends TestCase
             ->assertOk()
             ->assertSee('Pelanggan yang buka kredit')
             ->assertSee('Margin Keuntungan')
-            ->assertSee('Margin Penjualan');
+            ->assertSee('Margin Penjualan')
+            ->assertDontSee('CEO panel')
+            ->assertDontSee('Executive Workspace')
+            ->assertDontSee('Signed in')
+            ->assertDontSee('Today');
 
         $this->actingAs($ceo)
             ->get('/ceo/kredit')

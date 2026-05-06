@@ -115,6 +115,15 @@
             color: #ffffff;
         }
 
+        .btn-primary:disabled,
+        .btn-secondary:disabled,
+        .btn-success:disabled,
+        .btn-danger:disabled {
+            cursor: not-allowed;
+            opacity: .5;
+            transform: none;
+        }
+
         .metric-card {
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 28px;

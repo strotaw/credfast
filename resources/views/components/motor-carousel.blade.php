@@ -1,6 +1,6 @@
 @props([
     'motors',
-    'eyebrow' => 'Showroom',
+    'eyebrow' => null,
     'title' => 'Pilihan motor tersedia',
     'subtitle' => null,
 ])
@@ -23,8 +23,10 @@
                             class="h-72 w-full object-cover lg:h-full"
                         />
                         <div class="p-7 sm:p-9">
-                            <p class="text-sm uppercase tracking-[0.28em] text-sky-600">{{ $eyebrow }}</p>
-                            <h2 class="mt-3 text-3xl font-semibold">{{ $motor->nama_motor }}</h2>
+                            @if ($eyebrow)
+                                <p class="text-sm uppercase tracking-[0.28em] text-sky-600">{{ $eyebrow }}</p>
+                            @endif
+                            <h2 class="{{ $eyebrow ? 'mt-3' : '' }} text-3xl font-semibold">{{ $motor->nama_motor }}</h2>
                             <p class="mt-3 text-sm leading-7 text-slate-600">{{ \Illuminate\Support\Str::limit($motor->deskripsi_motor, 170) }}</p>
                             <div class="mt-6 grid gap-3 sm:grid-cols-2">
                                 <div class="rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
@@ -50,8 +52,7 @@
         </div>
 
         @if ($items->count() > 1)
-            <div class="flex items-center justify-between gap-4 border-t border-slate-200 px-6 py-4">
-                <p class="text-sm font-semibold text-slate-500">{{ $subtitle ?? 'Geser untuk melihat rekomendasi lainnya' }}</p>
+            <div class="flex items-center justify-end gap-4 border-t border-slate-200 px-6 py-4">
                 <div class="flex gap-2">
                     @foreach ($items as $motor)
                         <button type="button" data-carousel-dot="{{ $loop->index }}" class="{{ $loop->first ? 'bg-slate-950' : 'bg-slate-300' }} h-2.5 w-8 rounded-full transition" aria-label="Pilih slide {{ $loop->iteration }}"></button>

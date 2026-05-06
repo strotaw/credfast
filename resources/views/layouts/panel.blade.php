@@ -3,13 +3,6 @@
     $panel = $panel ?? 'user';
     $isUserPanel = $panel === 'user';
 
-    $panelLabels = [
-        'user' => 'Portal User',
-        'marketing' => 'Marketing Workspace',
-        'admin' => 'Admin Workspace',
-        'ceo' => 'Executive Workspace',
-    ];
-
     $themes = [
         'user' => [
             'badge' => 'bg-sky-50 text-sky-700 ring-sky-200',
@@ -102,7 +95,7 @@
                 <div class="mx-auto max-w-7xl px-6 py-4">
                     <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div class="flex items-center gap-3">
-                            <x-brand-logo subtitle="Customer Portal" />
+                            <x-brand-logo />
                         </div>
 
                         <div class="flex flex-wrap items-center gap-3">
@@ -130,7 +123,6 @@
                 <section class="shell-card overflow-hidden">
                     <div class="grid gap-5 px-6 py-6 sm:px-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
                         <div>
-                            <p class="text-xs uppercase tracking-[0.32em] text-slate-400">{{ $panelLabels[$panel] }}</p>
                             <h1 class="mt-2 text-3xl font-semibold text-slate-950">@yield('page-title', 'Dashboard')</h1>
                         </div>
 
@@ -144,15 +136,13 @@
                                         class="h-14 w-14 rounded-2xl object-cover"
                                     />
                                     <div class="min-w-0">
-                                        <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Akun aktif</p>
-                                        <p class="mt-2 truncate text-lg font-semibold text-slate-950">{{ $user->name }}</p>
+                                        <p class="truncate text-lg font-semibold text-slate-950">{{ $user->name }}</p>
                                         <p class="truncate text-sm text-slate-500">{{ $user->email }}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="rounded-[26px] border border-slate-200 bg-slate-50 p-4">
-                                <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Status portal</p>
-                                <span class="mt-3 inline-flex rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset {{ $theme['badge'] }}">{{ strtoupper($user->role) }}</span>
+                                <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset {{ $theme['badge'] }}">{{ strtoupper($user->role) }}</span>
                                 <p class="mt-3 text-sm text-slate-500">{{ now()->translatedFormat('d F Y') }}</p>
                             </div>
                         </div>
@@ -175,6 +165,20 @@
                     @yield('content')
                 </div>
             </main>
+
+            <footer class="relative border-t border-slate-200/80 bg-white/85">
+                <div class="mx-auto grid max-w-7xl gap-5 px-6 py-8 text-sm text-slate-500 md:grid-cols-[1.2fr_0.8fr] md:items-center">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.32em] text-slate-400">CredFast</p>
+                        <p class="mt-3 max-w-2xl leading-7">Kredit motor cepat, jelas, dan mudah dipantau dari pengajuan sampai angsuran.</p>
+                    </div>
+                    <div class="space-y-2 md:text-right">
+                        <p class="font-semibold text-slate-900">Kontak CredFast</p>
+                        <p>+6283875223935</p>
+                        <p>akmalzahir931@gmail.com</p>
+                    </div>
+                </div>
+            </footer>
         </div>
     @else
         <div class="min-h-screen xl:flex">
@@ -183,7 +187,7 @@
             <aside id="panel-sidebar" class="fixed left-0 top-0 z-50 flex h-screen w-[290px] -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-300 xl:translate-x-0">
                 <div class="flex items-center justify-between px-5 pb-7 pt-8">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                        <x-brand-logo :subtitle="strtoupper($panel).' panel'" />
+                        <x-brand-logo />
                     </a>
 
                     <button type="button" data-panel-close class="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 text-slate-500 xl:hidden">
@@ -197,8 +201,7 @@
                     <div class="overflow-hidden rounded-[30px] bg-slate-950 p-5 text-white shadow-xl shadow-slate-300/20">
                         <div class="flex items-start justify-between gap-3">
                             <div>
-                                <p class="text-xs uppercase tracking-[0.28em] text-slate-400">Signed in</p>
-                                <p class="mt-3 text-lg font-semibold">{{ $user->name }}</p>
+                                <p class="text-lg font-semibold">{{ $user->name }}</p>
                                 <p class="mt-1 text-sm text-slate-400">{{ $user->email }}</p>
                             </div>
                             <x-uploaded-image
@@ -255,15 +258,13 @@
                                 </svg>
                             </button>
                             <div>
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-400">{{ $panelLabels[$panel] }}</p>
-                                <h1 class="mt-1 text-2xl font-semibold text-slate-950">@yield('page-title', 'Dashboard')</h1>
+                                <h1 class="text-2xl font-semibold text-slate-950">@yield('page-title', 'Dashboard')</h1>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-3">
                             <div class="hidden text-right sm:block">
-                                <p class="text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-400">Today</p>
-                                <p class="mt-1 text-sm font-semibold text-slate-900">{{ now()->translatedFormat('d F Y') }}</p>
+                                <p class="text-sm font-semibold text-slate-900">{{ now()->translatedFormat('d F Y') }}</p>
                             </div>
                             <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset {{ $theme['badge'] }}">{{ strtoupper($user->role) }}</span>
                         </div>

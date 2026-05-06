@@ -89,7 +89,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/pengajuan/{pengajuan}', [AdminPengajuanKreditController::class, 'show'])->name('pengajuan.show');
     Route::put('/pengajuan/{pengajuan}/approve', [AdminPengajuanKreditController::class, 'approve'])->name('pengajuan.approve');
     Route::put('/pengajuan/{pengajuan}/reject', [AdminPengajuanKreditController::class, 'reject'])->name('pengajuan.reject');
-    Route::post('/pengajuan/{pengajuan}/buat-kredit', [AdminPengajuanKreditController::class, 'buatKredit'])->name('pengajuan.buat-kredit');
     Route::get('/kredit', [AdminKreditController::class, 'index'])->name('kredit.index');
     Route::get('/kredit/{kredit}', [AdminKreditController::class, 'show'])->name('kredit.show');
     Route::put('/kredit/{kredit}/status', [AdminKreditController::class, 'updateStatus'])->name('kredit.status');
@@ -97,7 +96,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::get('/angsuran/{angsuran}', [AdminAngsuranController::class, 'show'])->name('angsuran.show');
     Route::put('/angsuran/{angsuran}/validasi', [AdminAngsuranController::class, 'validasi'])->name('angsuran.validasi');
     Route::put('/angsuran/{angsuran}/tolak', [AdminAngsuranController::class, 'tolak'])->name('angsuran.tolak');
-    Route::resource('pengiriman', AdminPengirimanController::class);
+    Route::resource('pengiriman', AdminPengirimanController::class)->except(['create', 'store', 'destroy']);
     Route::get('/laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export-pdf', [AdminLaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
     Route::get('/laporan/export-excel', [AdminLaporanController::class, 'exportExcel'])->name('laporan.export-excel');
