@@ -6,6 +6,8 @@ use App\Models\Concerns\HasPublicImages;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -69,9 +71,38 @@ class User extends Authenticatable
         ];
     }
 
-    public function pengajuanKredit(): HasMany
+    public function pengajuanKredit(): HasManyThrough
     {
-        return $this->hasMany(PengajuanKredit::class);
+        return $this->hasManyThrough(PengajuanKredit::class, Pelanggan::class, 'user_id', 'pelanggan_id');
+    }
+
+    public function pelanggan(): HasOne
+    {
+        return $this->hasOne(Pelanggan::class);
+    }
+
+    public function syncPelangganProfile(): void
+    {
+        if ($this->role !== self::ROLE_USER) {
+            $this->pelanggan()->delete();
+
+            return;
+        }
+
+        $this->pelanggan()->updateOrCreate(
+            ['user_id' => $this->id],
+            [
+                'nama_pelanggan' => $this->name,
+                'email' => $this->email,
+                'katakunci' => $this->password,
+                'no_telp' => $this->no_hp,
+                'alamat1' => $this->alamat,
+                'kota1' => $this->kota,
+                'propinsi1' => $this->provinsi,
+                'kodepos1' => $this->kode_pos,
+                'foto' => $this->foto,
+            ],
+        );
     }
 
     public function fotoUrl(): ?string

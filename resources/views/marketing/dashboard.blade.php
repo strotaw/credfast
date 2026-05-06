@@ -4,11 +4,11 @@
 
 @section('content')
     <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <x-stat-card title="Pengajuan Baru" :value="$newCount" />
+        <x-stat-card title="Menunggu Konfirmasi" :value="$newCount" />
         <x-stat-card title="Diproses" :value="$processedCount" />
-        <x-stat-card title="Data Kurang" :value="$missingCount" />
-        <x-stat-card title="Direkomendasikan" :value="$recommendedCount" />
-        <x-stat-card title="Tidak Direkomendasikan" :value="$rejectedCount" />
+        <x-stat-card title="Dibatalkan Pembeli" :value="$cancelledBuyerCount" />
+        <x-stat-card title="Bermasalah" :value="$problemCount" />
+        <x-stat-card title="Diterima" :value="$acceptedCount" />
     </div>
 
     <section class="shell-card mt-8 overflow-hidden">
@@ -30,12 +30,15 @@
             </thead>
             <tbody class="divide-y divide-slate-200 bg-white">
                 @foreach ($latestPengajuan as $item)
+                    @php
+                        $customerName = $item->pelanggan?->nama_pelanggan ?? $item->user?->name ?? '-';
+                    @endphp
                     <tr>
-                        <td>{{ $item->user->name }}</td>
+                        <td>{{ $customerName }}</td>
                         <td>{{ $item->motor->nama_motor }}</td>
                         <td><x-status-badge :status="$item->status_pengajuan" /></td>
                         <td>{{ $item->marketing?->name ?? '-' }}</td>
-                        <td><a href="{{ route('marketing.pengajuan.show', $item) }}" class="btn-secondary">Review</a></td>
+                        <td><a href="{{ route('marketing.pengajuan.show', $item) }}" class="btn-secondary">Detail</a></td>
                     </tr>
                 @endforeach
             </tbody>

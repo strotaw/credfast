@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\JenisMotor;
 use App\Models\Motor;
-use App\Support\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -61,8 +60,6 @@ class MotorController extends Controller
 
         $item = Motor::create($validated);
 
-        ActivityLogger::log(auth()->user(), 'create_motor', 'motor', $item->id, 'Admin menambah motor.');
-
         return redirect()->route('admin.motor.index')->with('success', 'Motor berhasil ditambahkan.');
     }
 
@@ -107,8 +104,6 @@ class MotorController extends Controller
 
         $motor->update($validated);
 
-        ActivityLogger::log(auth()->user(), 'update_motor', 'motor', $motor->id, 'Admin memperbarui motor.');
-
         return redirect()->route('admin.motor.index')->with('success', 'Motor berhasil diperbarui.');
     }
 
@@ -118,8 +113,6 @@ class MotorController extends Controller
         $this->deletePublicFile($motor->foto2);
         $this->deletePublicFile($motor->foto3);
         $motor->delete();
-
-        ActivityLogger::log(auth()->user(), 'delete_motor', 'motor', $motor->id, 'Admin menghapus motor.');
 
         return redirect()->route('admin.motor.index')->with('success', 'Motor berhasil dihapus.');
     }

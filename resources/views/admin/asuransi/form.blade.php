@@ -5,10 +5,10 @@
         @csrf
         @if ($method !== 'POST') @method($method) @endif
         <div class="grid gap-4 md:grid-cols-2">
-            <input type="text" name="nama_perusahaan_asuransi" value="{{ old('nama_perusahaan_asuransi', $item->nama_perusahaan_asuransi) }}" class="shell-input" placeholder="Perusahaan">
-            <input type="text" name="nama_asuransi" value="{{ old('nama_asuransi', $item->nama_asuransi) }}" class="shell-input" placeholder="Nama asuransi">
-            <input type="number" step="0.01" name="margin_asuransi" value="{{ old('margin_asuransi', $item->margin_asuransi) }}" class="shell-input" placeholder="Margin">
-            <input type="text" name="no_rekening" value="{{ old('no_rekening', $item->no_rekening) }}" class="shell-input" placeholder="No rekening">
+            <input type="text" name="nama_perusahaan_asuransi" value="{{ old('nama_perusahaan_asuransi', $item->nama_perusahaan_asuransi) }}" class="shell-input" placeholder="Masukkan nama perusahaan asuransi">
+            <input type="text" name="nama_asuransi" value="{{ old('nama_asuransi', $item->nama_asuransi) }}" class="shell-input" placeholder="Masukkan nama produk asuransi">
+            <input type="number" step="0.01" name="margin_asuransi" value="{{ old('margin_asuransi', $item->margin_asuransi) }}" class="shell-input" placeholder="Masukkan margin asuransi dalam persen">
+            <input type="text" name="no_rekening" value="{{ old('no_rekening', $item->no_rekening) }}" class="shell-input" placeholder="Masukkan nomor rekening asuransi">
             <div class="md:col-span-2">
                 <label class="mb-2 block text-sm font-medium text-slate-700">Logo asuransi</label>
                 @if ($item->logoUrl())

@@ -29,12 +29,15 @@
             </thead>
             <tbody class="divide-y divide-slate-200 bg-white">
                 @foreach ($recentPengajuan as $item)
+                    @php
+                        $customerName = $item->pelanggan?->nama_pelanggan ?? $item->user?->name ?? '-';
+                    @endphp
                     <tr>
-                        <td>{{ $item->user->name }}</td>
+                        <td>{{ $customerName }}</td>
                         <td>{{ $item->motor->nama_motor }}</td>
                         <td><x-status-badge :status="$item->status_pengajuan" /></td>
                         <td>{{ $item->marketing?->name ?? '-' }}</td>
-                        <td><a href="{{ route('admin.pengajuan.show', $item) }}" class="btn-secondary">Tindak Lanjut</a></td>
+                        <td><a href="{{ route('admin.pengajuan.show', $item) }}" class="btn-secondary">Detail</a></td>
                     </tr>
                 @endforeach
             </tbody>

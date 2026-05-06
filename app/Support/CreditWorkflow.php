@@ -89,7 +89,7 @@ class CreditWorkflow
 
             self::refreshKreditStatus($kredit->fresh(['angsuran']));
 
-            return $kredit->fresh(['pengajuanKredit.user', 'pengajuanKredit.motor', 'angsuran', 'pengiriman']);
+            return $kredit->fresh(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor', 'angsuran', 'pengiriman']);
         });
     }
 

@@ -8,7 +8,6 @@ use App\Models\JenisCicilan;
 use App\Models\MetodeBayar;
 use App\Models\Motor;
 use App\Models\PengajuanKredit;
-use App\Support\ActivityLogger;
 use App\Support\PengajuanService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +20,7 @@ class PengajuanKreditController extends Controller
     public function index(Request $request): View
     {
         $pengajuan = PengajuanKredit::query()
-            ->with(['user', 'motor', 'jenisCicilan', 'metodeBayar', 'marketing', 'admin'])
+            ->with(['pelanggan.user', 'motor', 'jenisCicilan', 'metodeBayar', 'marketing', 'admin'])
             ->when($request->filled('status'), fn ($query) => $query->where('status_pengajuan', $request->string('status')))
             ->latest()
             ->paginate(12)
@@ -36,33 +35,15 @@ class PengajuanKreditController extends Controller
     public function show(PengajuanKredit $pengajuan): View
     {
         return view('marketing.pengajuan.show', [
-            'pengajuan' => $pengajuan->load(['user', 'motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'kredit']),
-            'statusOptions' => [
-                PengajuanKredit::STATUS_MENUNGGU,
-                PengajuanKredit::STATUS_DIPROSES,
-                PengajuanKredit::STATUS_DATA_KURANG,
-                PengajuanKredit::STATUS_SURVEY,
-                PengajuanKredit::STATUS_DIREKOMENDASIKAN,
-                PengajuanKredit::STATUS_TIDAK_DIREKOMENDASIKAN,
-                PengajuanKredit::STATUS_DITERIMA,
-                PengajuanKredit::STATUS_DITOLAK,
-            ],
+            'pengajuan' => $pengajuan->load(['pelanggan.user', 'motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'kredit']),
+            'statusOptions' => PengajuanKredit::STATUS_OPTIONS,
         ]);
     }
 
     public function updateStatus(Request $request, PengajuanKredit $pengajuan): RedirectResponse
     {
         $validated = $request->validate([
-            'status_pengajuan' => ['required', Rule::in([
-                PengajuanKredit::STATUS_MENUNGGU,
-                PengajuanKredit::STATUS_DIPROSES,
-                PengajuanKredit::STATUS_DATA_KURANG,
-                PengajuanKredit::STATUS_SURVEY,
-                PengajuanKredit::STATUS_DIREKOMENDASIKAN,
-                PengajuanKredit::STATUS_TIDAK_DIREKOMENDASIKAN,
-                PengajuanKredit::STATUS_DITERIMA,
-                PengajuanKredit::STATUS_DITOLAK,
-            ])],
+            'status_pengajuan' => ['required', Rule::in(PengajuanKredit::STATUS_OPTIONS)],
             'keterangan_status_pengajuan' => ['nullable', 'string'],
         ]);
 
@@ -71,8 +52,6 @@ class PengajuanKreditController extends Controller
             'keterangan_status_pengajuan' => $validated['keterangan_status_pengajuan'] ?? $pengajuan->keterangan_status_pengajuan,
             'marketing_id' => auth()->id(),
         ]);
-
-        ActivityLogger::log(auth()->user(), 'update_status_pengajuan', 'pengajuan_kredit', $pengajuan->id, 'Marketing mengubah status pengajuan.');
 
         return back()->with('success', 'Status pengajuan berhasil diperbarui.');
     }
@@ -89,8 +68,6 @@ class PengajuanKreditController extends Controller
             'keterangan_status_pengajuan' => $validated['keterangan_status_pengajuan'] ?? $pengajuan->keterangan_status_pengajuan,
             'marketing_id' => auth()->id(),
         ]);
-
-        ActivityLogger::log(auth()->user(), 'update_catatan_pengajuan', 'pengajuan_kredit', $pengajuan->id, 'Marketing memberi catatan follow-up.');
 
         return back()->with('success', 'Catatan marketing berhasil disimpan.');
     }
@@ -156,8 +133,6 @@ class PengajuanKreditController extends Controller
                 'status_pengajuan' => PengajuanKredit::STATUS_DIPROSES,
             ],
         );
-
-        ActivityLogger::log(auth()->user(), 'buat_pengajuan_offline_marketing', 'pengajuan_kredit', $pengajuan->id, 'Marketing membuat pengajuan offline.');
 
         return redirect()->route('marketing.pengajuan.show', $pengajuan)->with('success', 'Pengajuan offline berhasil dibuat.');
     }

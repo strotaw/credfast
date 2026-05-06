@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Asuransi;
 use App\Models\JenisCicilan;
 use App\Models\JenisMotor;
-use App\Models\MetodeBayar;
 use App\Models\Motor;
 use App\Support\CreditCalculator;
 use Illuminate\Http\Request;
@@ -17,18 +16,15 @@ class PublicController extends Controller
     public function index(): View
     {
         return view('public.index', [
-            'featuredMotors' => Motor::query()
+            'availableMotors' => Motor::query()
                 ->with('jenisMotor')
                 ->where('status', Motor::STATUS_TERSEDIA)
                 ->latest()
-                ->take(6)
+                ->take(9)
                 ->get(),
             'motorCount' => Motor::query()->where('status', Motor::STATUS_TERSEDIA)->count(),
             'tenorCount' => JenisCicilan::query()->count(),
             'brandCount' => JenisMotor::query()->count(),
-            'jenisMotors' => JenisMotor::query()->withCount('motor')->latest()->take(6)->get(),
-            'asuransiList' => Asuransi::query()->latest()->take(4)->get(),
-            'metodeBayarList' => MetodeBayar::query()->where('status', MetodeBayar::STATUS_AKTIF)->latest()->take(4)->get(),
         ]);
     }
 

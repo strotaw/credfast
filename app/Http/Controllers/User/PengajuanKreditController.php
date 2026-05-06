@@ -8,7 +8,6 @@ use App\Models\JenisCicilan;
 use App\Models\MetodeBayar;
 use App\Models\Motor;
 use App\Models\PengajuanKredit;
-use App\Support\ActivityLogger;
 use App\Support\PengajuanService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +18,8 @@ class PengajuanKreditController extends Controller
 {
     public function index(): View
     {
+        auth()->user()->syncPelangganProfile();
+
         return view('user.pengajuan.index', [
             'pengajuanList' => auth()->user()
                 ->pengajuanKredit()
@@ -77,14 +78,12 @@ class PengajuanKreditController extends Controller
             ],
         );
 
-        ActivityLogger::log(auth()->user(), 'buat_pengajuan', 'pengajuan_kredit', $pengajuan->id, 'User mengajukan kredit motor.');
-
         return redirect()->route('user.pengajuan.show', $pengajuan)->with('success', 'Pengajuan kredit berhasil dikirim.');
     }
 
     public function show(PengajuanKredit $pengajuan): View
     {
-        abort_if($pengajuan->user_id !== auth()->id(), 403);
+        abort_if($pengajuan->pelanggan?->user_id !== auth()->id(), 403);
 
         return view('user.pengajuan.show', [
             'pengajuan' => $pengajuan->load(['motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'marketing', 'admin', 'kredit.pengiriman']),

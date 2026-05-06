@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Support\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -58,8 +57,7 @@ class UserController extends Controller
         $validated['foto'] = $this->storePublicFile($request, 'foto', 'profile');
 
         $user = User::create($validated);
-
-        ActivityLogger::log(auth()->user(), 'create_user', 'users', $user->id, 'Admin membuat akun baru.');
+        $user->syncPelangganProfile();
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan.');
     }
@@ -103,8 +101,7 @@ class UserController extends Controller
         }
 
         $user->update($validated);
-
-        ActivityLogger::log(auth()->user(), 'update_user', 'users', $user->id, 'Admin memperbarui user.');
+        $user->syncPelangganProfile();
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui.');
     }
@@ -115,8 +112,6 @@ class UserController extends Controller
 
         $this->deletePublicFile($user->foto);
         $user->delete();
-
-        ActivityLogger::log(auth()->user(), 'delete_user', 'users', $user->id, 'Admin menghapus user.');
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
     }

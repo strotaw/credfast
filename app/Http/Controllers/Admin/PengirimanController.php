@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Kredit;
 use App\Models\Pengiriman;
-use App\Support\ActivityLogger;
 use App\Support\CreditWorkflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,15 +16,15 @@ class PengirimanController extends Controller
     public function index(): View
     {
         return view('admin.pengiriman.index', [
-            'items' => Pengiriman::query()->with(['kredit.pengajuanKredit.user', 'kredit.pengajuanKredit.motor'])->latest()->paginate(12),
+            'items' => Pengiriman::query()->with(['kredit.pengajuanKredit.pelanggan.user', 'kredit.pengajuanKredit.motor'])->latest()->paginate(12),
         ]);
     }
 
     public function create(): View
     {
         return view('admin.pengiriman.form', [
-            'item' => new Pengiriman(),
-            'kreditList' => Kredit::query()->with(['pengajuanKredit.user', 'pengajuanKredit.motor'])->doesntHave('pengiriman')->get(),
+            'item' => new Pengiriman,
+            'kreditList' => Kredit::query()->with(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor'])->doesntHave('pengiriman')->get(),
             'statuses' => [Pengiriman::STATUS_DIPROSES, Pengiriman::STATUS_DIKIRIM, Pengiriman::STATUS_DITERIMA],
             'action' => route('admin.pengiriman.store'),
             'method' => 'POST',
@@ -51,15 +50,13 @@ class PengirimanController extends Controller
 
         $item = Pengiriman::create($validated);
 
-        ActivityLogger::log(auth()->user(), 'create_pengiriman', 'pengiriman', $item->id, 'Admin membuat data pengiriman.');
-
         return redirect()->route('admin.pengiriman.index')->with('success', 'Data pengiriman berhasil ditambahkan.');
     }
 
     public function show(Pengiriman $pengiriman): View
     {
         return view('admin.pengiriman.show', [
-            'item' => $pengiriman->load(['kredit.pengajuanKredit.user', 'kredit.pengajuanKredit.motor']),
+            'item' => $pengiriman->load(['kredit.pengajuanKredit.pelanggan.user', 'kredit.pengajuanKredit.motor']),
         ]);
     }
 
@@ -67,7 +64,7 @@ class PengirimanController extends Controller
     {
         return view('admin.pengiriman.form', [
             'item' => $pengiriman,
-            'kreditList' => Kredit::query()->with(['pengajuanKredit.user', 'pengajuanKredit.motor'])->get(),
+            'kreditList' => Kredit::query()->with(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor'])->get(),
             'statuses' => [Pengiriman::STATUS_DIPROSES, Pengiriman::STATUS_DIKIRIM, Pengiriman::STATUS_DITERIMA],
             'action' => route('admin.pengiriman.update', $pengiriman),
             'method' => 'PUT',
@@ -91,8 +88,6 @@ class PengirimanController extends Controller
         $validated['bukti_foto'] = $this->storePublicFile($request, 'bukti_foto', 'pengiriman', $pengiriman->bukti_foto);
         $pengiriman->update($validated);
 
-        ActivityLogger::log(auth()->user(), 'update_pengiriman', 'pengiriman', $pengiriman->id, 'Admin memperbarui pengiriman.');
-
         return redirect()->route('admin.pengiriman.index')->with('success', 'Data pengiriman berhasil diperbarui.');
     }
 
@@ -100,8 +95,6 @@ class PengirimanController extends Controller
     {
         $this->deletePublicFile($pengiriman->bukti_foto);
         $pengiriman->delete();
-
-        ActivityLogger::log(auth()->user(), 'delete_pengiriman', 'pengiriman', $pengiriman->id, 'Admin menghapus pengiriman.');
 
         return redirect()->route('admin.pengiriman.index')->with('success', 'Data pengiriman berhasil dihapus.');
     }

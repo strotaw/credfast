@@ -8,7 +8,6 @@ use App\Models\JenisCicilan;
 use App\Models\MetodeBayar;
 use App\Models\Motor;
 use App\Models\PengajuanKredit;
-use App\Support\ActivityLogger;
 use App\Support\CreditWorkflow;
 use App\Support\PengajuanService;
 use Carbon\Carbon;
@@ -23,7 +22,7 @@ class PengajuanKreditController extends Controller
     public function index(Request $request): View
     {
         $pengajuan = PengajuanKredit::query()
-            ->with(['user', 'motor', 'jenisCicilan', 'metodeBayar', 'marketing', 'admin', 'kredit'])
+            ->with(['pelanggan.user', 'motor', 'jenisCicilan', 'metodeBayar', 'marketing', 'admin', 'kredit'])
             ->when($request->filled('status'), fn ($query) => $query->where('status_pengajuan', $request->string('status')))
             ->latest()
             ->paginate(12)
@@ -38,7 +37,7 @@ class PengajuanKreditController extends Controller
     public function show(PengajuanKredit $pengajuan): View
     {
         return view('admin.pengajuan.show', [
-            'pengajuan' => $pengajuan->load(['user', 'motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'marketing', 'admin', 'kredit.angsuran', 'kredit.metodeBayar']),
+            'pengajuan' => $pengajuan->load(['pelanggan.user', 'motor.jenisMotor', 'jenisCicilan', 'asuransi', 'metodeBayar', 'marketing', 'admin', 'kredit.angsuran', 'kredit.metodeBayar']),
         ]);
     }
 
@@ -54,8 +53,6 @@ class PengajuanKreditController extends Controller
             'keterangan_status_pengajuan' => $validated['keterangan_status_pengajuan'] ?? 'Disetujui admin.',
         ]);
 
-        ActivityLogger::log(auth()->user(), 'approve_pengajuan', 'pengajuan_kredit', $pengajuan->id, 'Admin menyetujui pengajuan.');
-
         return back()->with('success', 'Pengajuan berhasil disetujui.');
     }
 
@@ -66,14 +63,12 @@ class PengajuanKreditController extends Controller
         ]);
 
         $pengajuan->update([
-            'status_pengajuan' => PengajuanKredit::STATUS_DITOLAK,
+            'status_pengajuan' => PengajuanKredit::STATUS_DIBATALKAN_PENJUAL,
             'admin_id' => auth()->id(),
             'keterangan_status_pengajuan' => $validated['keterangan_status_pengajuan'],
         ]);
 
-        ActivityLogger::log(auth()->user(), 'reject_pengajuan', 'pengajuan_kredit', $pengajuan->id, 'Admin menolak pengajuan.');
-
-        return back()->with('success', 'Pengajuan berhasil ditolak.');
+        return back()->with('success', 'Pengajuan berhasil dibatalkan penjual.');
     }
 
     public function buatKredit(Request $request, PengajuanKredit $pengajuan): RedirectResponse
@@ -91,8 +86,6 @@ class PengajuanKreditController extends Controller
         } catch (RuntimeException $exception) {
             return back()->withErrors(['buat_kredit' => $exception->getMessage()]);
         }
-
-        ActivityLogger::log(auth()->user(), 'buat_kredit', 'kredit', $kredit->id, 'Admin membuat kredit dari pengajuan.');
 
         return redirect()->route('admin.kredit.show', $kredit)->with('success', 'Kredit dan jadwal angsuran berhasil dibuat.');
     }
@@ -154,8 +147,6 @@ class PengajuanKreditController extends Controller
                 'status_pengajuan' => PengajuanKredit::STATUS_DIPROSES,
             ],
         );
-
-        ActivityLogger::log(auth()->user(), 'buat_pengajuan_offline_admin', 'pengajuan_kredit', $pengajuan->id, 'Admin membuat pengajuan offline.');
 
         return redirect()->route('admin.pengajuan.show', $pengajuan)->with('success', 'Pengajuan offline berhasil dibuat.');
     }

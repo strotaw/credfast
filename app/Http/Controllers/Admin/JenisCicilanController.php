@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\JenisCicilan;
-use App\Support\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,7 +20,7 @@ class JenisCicilanController extends Controller
     public function create(): View
     {
         return view('admin.jenis_cicilan.form', [
-            'item' => new JenisCicilan(),
+            'item' => new JenisCicilan,
             'action' => route('admin.jenis-cicilan.store'),
             'method' => 'POST',
         ]);
@@ -35,8 +34,6 @@ class JenisCicilanController extends Controller
         ]);
 
         $item = JenisCicilan::create($validated);
-
-        ActivityLogger::log(auth()->user(), 'create_jenis_cicilan', 'jenis_cicilan', $item->id, 'Admin menambah jenis cicilan.');
 
         return redirect()->route('admin.jenis-cicilan.index')->with('success', 'Jenis cicilan berhasil ditambahkan.');
     }
@@ -66,16 +63,12 @@ class JenisCicilanController extends Controller
 
         $jenis_cicilan->update($validated);
 
-        ActivityLogger::log(auth()->user(), 'update_jenis_cicilan', 'jenis_cicilan', $jenis_cicilan->id, 'Admin memperbarui jenis cicilan.');
-
         return redirect()->route('admin.jenis-cicilan.index')->with('success', 'Jenis cicilan berhasil diperbarui.');
     }
 
     public function destroy(JenisCicilan $jenis_cicilan): RedirectResponse
     {
         $jenis_cicilan->delete();
-
-        ActivityLogger::log(auth()->user(), 'delete_jenis_cicilan', 'jenis_cicilan', $jenis_cicilan->id, 'Admin menghapus jenis cicilan.');
 
         return redirect()->route('admin.jenis-cicilan.index')->with('success', 'Jenis cicilan berhasil dihapus.');
     }

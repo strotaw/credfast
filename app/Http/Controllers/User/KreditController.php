@@ -10,10 +10,13 @@ class KreditController extends Controller
 {
     public function index(): View
     {
+        auth()->user()->syncPelangganProfile();
+        $pelanggan = auth()->user()->pelanggan()->firstOrFail();
+
         return view('user.kredit.index', [
             'kreditList' => Kredit::query()
                 ->with(['pengajuanKredit.motor.jenisMotor', 'metodeBayar', 'pengiriman'])
-                ->whereHas('pengajuanKredit', fn ($query) => $query->where('user_id', auth()->id()))
+                ->whereHas('pengajuanKredit', fn ($query) => $query->where('pelanggan_id', $pelanggan->id))
                 ->latest()
                 ->paginate(10),
         ]);
@@ -21,7 +24,7 @@ class KreditController extends Controller
 
     public function show(Kredit $kredit): View
     {
-        abort_if($kredit->pengajuanKredit->user_id !== auth()->id(), 403);
+        abort_if($kredit->pengajuanKredit->pelanggan?->user_id !== auth()->id(), 403);
 
         return view('user.kredit.show', [
             'kredit' => $kredit->load(['pengajuanKredit.motor.jenisMotor', 'metodeBayar', 'pengiriman', 'angsuran']),

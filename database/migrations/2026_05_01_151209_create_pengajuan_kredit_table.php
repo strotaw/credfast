@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pengajuan_kredit', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('pelanggan_id')->constrained('pelanggan')->cascadeOnDelete();
             $table->foreignId('motor_id')->constrained('motor')->cascadeOnDelete();
             $table->foreignId('jenis_cicilan_id')->constrained('jenis_cicilan')->cascadeOnDelete();
             $table->foreignId('asuransi_id')->nullable()->constrained('asuransi')->nullOnDelete();
@@ -29,16 +29,13 @@ return new class extends Migration
             $table->string('url_slip_gaji')->nullable();
             $table->string('url_foto')->nullable();
             $table->enum('status_pengajuan', [
-                'menunggu',
+                'menunggu_konfirmasi',
                 'diproses',
-                'data_kurang',
-                'survey',
-                'direkomendasikan',
-                'tidak_direkomendasikan',
+                'dibatalkan_pembeli',
+                'dibatalkan_penjual',
+                'bermasalah',
                 'diterima',
-                'ditolak',
-                'dibatalkan_user',
-            ])->default('menunggu');
+            ])->default('menunggu_konfirmasi');
             $table->text('catatan_marketing')->nullable();
             $table->foreignId('marketing_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('admin_id')->nullable()->constrained('users')->nullOnDelete();

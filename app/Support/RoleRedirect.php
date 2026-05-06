@@ -11,7 +11,7 @@ class RoleRedirect
         return match ($role) {
             User::ROLE_MARKETING => route('marketing.dashboard'),
             User::ROLE_ADMIN => route('admin.dashboard'),
-            User::ROLE_CEO => route('ceo.dashboard'),
+            User::ROLE_CEO => route('ceo.laporan.penjualan'),
             default => route('user.dashboard'),
         };
     }

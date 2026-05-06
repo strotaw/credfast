@@ -8,6 +8,7 @@ use App\Models\Asuransi;
 use App\Models\Kredit;
 use App\Models\MetodeBayar;
 use App\Models\Motor;
+use App\Models\PengajuanKredit;
 use App\Support\CreditWorkflow;
 use Illuminate\View\View;
 
@@ -18,14 +19,20 @@ class DashboardController extends Controller
         CreditWorkflow::syncOverdueStatuses();
 
         $user = auth()->user();
+        $user->syncPelangganProfile();
+        $pelanggan = $user->pelanggan()->firstOrFail();
 
         $pengajuanQuery = $user->pengajuanKredit();
-        $kreditQuery = Kredit::query()->whereHas('pengajuanKredit', fn ($query) => $query->where('user_id', $user->id));
-        $angsuranQuery = Angsuran::query()->whereHas('kredit.pengajuanKredit', fn ($query) => $query->where('user_id', $user->id));
+        $kreditQuery = Kredit::query()->whereHas('pengajuanKredit', fn ($query) => $query->where('pelanggan_id', $pelanggan->id));
+        $angsuranQuery = Angsuran::query()->whereHas('kredit.pengajuanKredit', fn ($query) => $query->where('pelanggan_id', $pelanggan->id));
 
         return view('user.dashboard', [
             'totalPengajuan' => (clone $pengajuanQuery)->count(),
-            'pengajuanAktif' => (clone $pengajuanQuery)->whereIn('status_pengajuan', ['menunggu', 'diproses', 'survey', 'direkomendasikan'])->count(),
+            'pengajuanAktif' => (clone $pengajuanQuery)->whereIn('status_pengajuan', [
+                PengajuanKredit::STATUS_MENUNGGU_KONFIRMASI,
+                PengajuanKredit::STATUS_DIPROSES,
+                PengajuanKredit::STATUS_BERMASALAH,
+            ])->count(),
             'kreditAktif' => (clone $kreditQuery)->where('status_kredit', Kredit::STATUS_AKTIF)->count(),
             'angsuranBelumDibayar' => (clone $angsuranQuery)->whereIn('status', [Angsuran::STATUS_MENUNGGU, Angsuran::STATUS_TELAT, Angsuran::STATUS_DITOLAK])->count(),
             'pengajuanTerbaru' => $user->pengajuanKredit()->with(['motor', 'jenisCicilan'])->latest()->take(5)->get(),

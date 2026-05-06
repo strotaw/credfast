@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\JenisMotor;
-use App\Support\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -48,8 +47,6 @@ class JenisMotorController extends Controller
 
         $item = JenisMotor::create($validated);
 
-        ActivityLogger::log(auth()->user(), 'create_jenis_motor', 'jenis_motor', $item->id, 'Admin menambah jenis motor.');
-
         return redirect()->route('admin.jenis-motor.index')->with('success', 'Jenis motor berhasil ditambahkan.');
     }
 
@@ -82,8 +79,6 @@ class JenisMotorController extends Controller
         $validated['image_url'] = $this->storePublicFile($request, 'image_url', 'motor', $jenis_motor->image_url);
         $jenis_motor->update($validated);
 
-        ActivityLogger::log(auth()->user(), 'update_jenis_motor', 'jenis_motor', $jenis_motor->id, 'Admin memperbarui jenis motor.');
-
         return redirect()->route('admin.jenis-motor.index')->with('success', 'Jenis motor berhasil diperbarui.');
     }
 
@@ -91,8 +86,6 @@ class JenisMotorController extends Controller
     {
         $this->deletePublicFile($jenis_motor->image_url);
         $jenis_motor->delete();
-
-        ActivityLogger::log(auth()->user(), 'delete_jenis_motor', 'jenis_motor', $jenis_motor->id, 'Admin menghapus jenis motor.');
 
         return redirect()->route('admin.jenis-motor.index')->with('success', 'Jenis motor berhasil dihapus.');
     }

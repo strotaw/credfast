@@ -24,9 +24,11 @@ class PengajuanService
         array $extra = [],
     ): PengajuanKredit {
         $simulation = CreditCalculator::calculate($motor->harga_jual, $dp, $jenisCicilan, $asuransi);
+        $user->syncPelangganProfile();
+        $pelanggan = $user->pelanggan()->firstOrFail();
 
         return PengajuanKredit::create(array_merge([
-            'user_id' => $user->id,
+            'pelanggan_id' => $pelanggan->id,
             'motor_id' => $motor->id,
             'jenis_cicilan_id' => $jenisCicilan->id,
             'asuransi_id' => $asuransi?->id,
@@ -41,7 +43,7 @@ class PengajuanService
             'url_npwp' => $documents['url_npwp'] ?? null,
             'url_slip_gaji' => $documents['url_slip_gaji'] ?? null,
             'url_foto' => $documents['url_foto'] ?? null,
-            'status_pengajuan' => PengajuanKredit::STATUS_MENUNGGU,
+            'status_pengajuan' => PengajuanKredit::STATUS_MENUNGGU_KONFIRMASI,
         ], $extra));
     }
 
@@ -64,6 +66,7 @@ class PengajuanService
         ]);
 
         $user->save();
+        $user->syncPelangganProfile();
 
         return $user;
     }

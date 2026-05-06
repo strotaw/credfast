@@ -9,11 +9,11 @@
         @csrf
         <div>
             <label class="mb-2 block text-sm font-medium text-slate-700">Email</label>
-            <input type="email" name="email" value="{{ old('email') }}" class="shell-input" required>
+            <input type="email" name="email" value="{{ old('email') }}" class="shell-input" placeholder="Masukkan email akun" required>
         </div>
         <div>
             <label class="mb-2 block text-sm font-medium text-slate-700">Password</label>
-            <input type="password" name="password" class="shell-input" required>
+            <input type="password" name="password" class="shell-input" placeholder="Masukkan password akun" required>
         </div>
         <label class="flex items-center gap-2 text-sm text-slate-600">
             <input type="checkbox" name="remember" value="1" class="rounded border-slate-300">

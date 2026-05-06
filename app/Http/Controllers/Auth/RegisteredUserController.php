@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Support\ActivityLogger;
 use App\Support\RoleRedirect;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -34,12 +33,11 @@ class RegisteredUserController extends Controller
             'password' => $validated['password'],
             'role' => User::ROLE_USER,
         ]);
+        $user->syncPelangganProfile();
 
         event(new Registered($user));
 
         Auth::login($user);
-
-        ActivityLogger::log($user, 'register', 'users', $user->id, 'User baru mendaftar dari halaman publik.');
 
         return redirect(RoleRedirect::dashboard($user->role))->with('success', 'Akun berhasil dibuat. Selamat datang di CredFast.');
     }

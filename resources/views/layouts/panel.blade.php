@@ -77,17 +77,8 @@
             ],
         ],
         'ceo' => [
-            'Monitoring' => [
-                ['label' => 'Dashboard', 'route' => 'ceo.dashboard', 'active' => 'ceo.dashboard'],
-                ['label' => 'Monitoring Pengajuan', 'route' => 'ceo.pengajuan.index', 'active' => 'ceo.pengajuan.*'],
-                ['label' => 'Monitoring Kredit', 'route' => 'ceo.kredit.index', 'active' => 'ceo.kredit.*'],
-                ['label' => 'Monitoring Angsuran', 'route' => 'ceo.angsuran.index', 'active' => 'ceo.angsuran.*'],
-                ['label' => 'Monitoring Pengiriman', 'route' => 'ceo.pengiriman.index', 'active' => 'ceo.pengiriman.*'],
-            ],
             'Laporan' => [
-                ['label' => 'Laporan Keuntungan', 'route' => 'ceo.laporan.keuntungan', 'active' => 'ceo.laporan.keuntungan'],
                 ['label' => 'Laporan Penjualan', 'route' => 'ceo.laporan.penjualan', 'active' => 'ceo.laporan.penjualan'],
-                ['label' => 'Kredit Macet', 'route' => 'ceo.laporan.kredit-macet', 'active' => 'ceo.laporan.kredit-macet'],
             ],
         ],
     ];

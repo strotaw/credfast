@@ -11,40 +11,31 @@ class PengajuanKredit extends Model
 {
     use HasFactory;
 
-    public const STATUS_MENUNGGU = 'menunggu';
+    public const STATUS_MENUNGGU_KONFIRMASI = 'menunggu_konfirmasi';
 
     public const STATUS_DIPROSES = 'diproses';
 
-    public const STATUS_DATA_KURANG = 'data_kurang';
+    public const STATUS_DIBATALKAN_PEMBELI = 'dibatalkan_pembeli';
 
-    public const STATUS_SURVEY = 'survey';
+    public const STATUS_DIBATALKAN_PENJUAL = 'dibatalkan_penjual';
 
-    public const STATUS_DIREKOMENDASIKAN = 'direkomendasikan';
-
-    public const STATUS_TIDAK_DIREKOMENDASIKAN = 'tidak_direkomendasikan';
+    public const STATUS_BERMASALAH = 'bermasalah';
 
     public const STATUS_DITERIMA = 'diterima';
 
-    public const STATUS_DITOLAK = 'ditolak';
-
-    public const STATUS_DIBATALKAN_USER = 'dibatalkan_user';
-
     public const STATUS_OPTIONS = [
-        self::STATUS_MENUNGGU,
+        self::STATUS_MENUNGGU_KONFIRMASI,
         self::STATUS_DIPROSES,
-        self::STATUS_DATA_KURANG,
-        self::STATUS_SURVEY,
-        self::STATUS_DIREKOMENDASIKAN,
-        self::STATUS_TIDAK_DIREKOMENDASIKAN,
+        self::STATUS_DIBATALKAN_PEMBELI,
+        self::STATUS_DIBATALKAN_PENJUAL,
+        self::STATUS_BERMASALAH,
         self::STATUS_DITERIMA,
-        self::STATUS_DITOLAK,
-        self::STATUS_DIBATALKAN_USER,
     ];
 
     protected $table = 'pengajuan_kredit';
 
     protected $fillable = [
-        'user_id',
+        'pelanggan_id',
         'motor_id',
         'jenis_cicilan_id',
         'asuransi_id',
@@ -79,9 +70,14 @@ class PengajuanKredit extends Model
         ];
     }
 
-    public function user(): BelongsTo
+    public function pelanggan(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Pelanggan::class);
+    }
+
+    public function getUserAttribute(): ?User
+    {
+        return $this->pelanggan?->user;
     }
 
     public function motor(): BelongsTo

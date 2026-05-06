@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\MetodeBayar;
-use App\Support\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -41,8 +40,6 @@ class MetodeBayarController extends Controller
         $validated['url_logo'] = $this->storePublicFile($request, 'url_logo', 'motor');
         $item = MetodeBayar::create($validated);
 
-        ActivityLogger::log(auth()->user(), 'create_metode_bayar', 'metode_bayar', $item->id, 'Admin menambah metode bayar.');
-
         return redirect()->route('admin.metode-bayar.index')->with('success', 'Metode bayar berhasil ditambahkan.');
     }
 
@@ -75,8 +72,6 @@ class MetodeBayarController extends Controller
         $validated['url_logo'] = $this->storePublicFile($request, 'url_logo', 'motor', $metode_bayar->url_logo);
         $metode_bayar->update($validated);
 
-        ActivityLogger::log(auth()->user(), 'update_metode_bayar', 'metode_bayar', $metode_bayar->id, 'Admin memperbarui metode bayar.');
-
         return redirect()->route('admin.metode-bayar.index')->with('success', 'Metode bayar berhasil diperbarui.');
     }
 
@@ -84,8 +79,6 @@ class MetodeBayarController extends Controller
     {
         $this->deletePublicFile($metode_bayar->url_logo);
         $metode_bayar->delete();
-
-        ActivityLogger::log(auth()->user(), 'delete_metode_bayar', 'metode_bayar', $metode_bayar->id, 'Admin menghapus metode bayar.');
 
         return redirect()->route('admin.metode-bayar.index')->with('success', 'Metode bayar berhasil dihapus.');
     }

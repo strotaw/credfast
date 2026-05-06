@@ -69,6 +69,34 @@ class ReportService
     }
 
     /**
+     * @return array<int, array{label: string, total: int}>
+     */
+    public static function monthlyOpenedCredits(int $months = 6): array
+    {
+        $points = collect();
+
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $date = now()->startOfMonth()->subMonths($i);
+            $points->push([
+                'key' => $date->format('Y-m'),
+                'label' => $date->translatedFormat('M Y'),
+                'total' => 0,
+            ]);
+        }
+
+        $totals = Kredit::query()
+            ->get()
+            ->groupBy(fn (Kredit $kredit) => $kredit->tgl_mulai_kredit->format('Y-m'))
+            ->map(fn (Collection $group) => $group->count());
+
+        return $points->map(function (array $point) use ($totals) {
+            $point['total'] = (int) ($totals[$point['key']] ?? 0);
+
+            return $point;
+        })->values()->all();
+    }
+
+    /**
      * @return array<string, int>
      */
     public static function creditStatusBreakdown(): array
@@ -90,16 +118,38 @@ class ReportService
 
     public static function totalProfit(): float
     {
-        $marginProfit = (float) Kredit::query()
-            ->with('pengajuanKredit')
-            ->get()
-            ->sum(fn (Kredit $kredit) => $kredit->total_kredit - $kredit->pengajuanKredit->harga_cash);
-
         $dendaProfit = (float) Angsuran::query()
             ->where('status', Angsuran::STATUS_VALID)
             ->sum('denda');
 
-        return round($marginProfit + $dendaProfit, 2);
+        return round(self::totalSalesMargin() + $dendaProfit, 2);
+    }
+
+    public static function totalCashSalesValue(): float
+    {
+        return (float) Kredit::query()
+            ->with('pengajuanKredit')
+            ->get()
+            ->sum(fn (Kredit $kredit) => $kredit->pengajuanKredit?->harga_cash ?? 0);
+    }
+
+    public static function totalSalesMargin(): float
+    {
+        $salesMargin = (float) Kredit::query()
+            ->with('pengajuanKredit')
+            ->get()
+            ->sum(fn (Kredit $kredit) => $kredit->total_kredit - ($kredit->pengajuanKredit?->harga_cash ?? 0));
+
+        return round($salesMargin, 2);
+    }
+
+    public static function marginPercentage(float $margin, float $base): float
+    {
+        if ($base <= 0) {
+            return 0.0;
+        }
+
+        return round(($margin / $base) * 100, 2);
     }
 
     public static function topMotors(int $limit = 5): Collection
@@ -114,7 +164,7 @@ class ReportService
     public static function badCredits(int $limit = 10): Collection
     {
         return Kredit::query()
-            ->with(['pengajuanKredit.user', 'pengajuanKredit.motor'])
+            ->with(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor'])
             ->where('status_kredit', Kredit::STATUS_MACET)
             ->latest()
             ->take($limit)

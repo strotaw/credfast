@@ -18,13 +18,13 @@
             <form method="POST" action="{{ route('admin.angsuran.validasi', $item) }}" class="shell-card p-8">
                 @csrf @method('PUT')
                 <h3 class="section-title">Validasi pembayaran</h3>
-                <textarea name="keterangan" class="shell-textarea mt-4" placeholder="Catatan validasi">{{ $item->keterangan }}</textarea>
+                <textarea name="keterangan" class="shell-textarea mt-4" placeholder="Masukkan catatan validasi pembayaran">{{ $item->keterangan }}</textarea>
                 <button class="btn-success mt-4">Validasi</button>
             </form>
             <form method="POST" action="{{ route('admin.angsuran.tolak', $item) }}" class="shell-card p-8">
                 @csrf @method('PUT')
                 <h3 class="section-title">Tolak pembayaran</h3>
-                <textarea name="keterangan" class="shell-textarea mt-4" placeholder="Alasan penolakan"></textarea>
+                <textarea name="keterangan" class="shell-textarea mt-4" placeholder="Masukkan alasan penolakan pembayaran"></textarea>
                 <button class="btn-danger mt-4">Tolak</button>
             </form>
         </div>

@@ -14,28 +14,28 @@ class MonitoringController extends Controller
     public function pengajuan(): View
     {
         return view('ceo.monitoring.pengajuan', [
-            'items' => PengajuanKredit::query()->with(['user', 'motor', 'marketing', 'admin'])->latest()->paginate(15),
+            'items' => PengajuanKredit::query()->with(['pelanggan.user', 'motor', 'marketing', 'admin'])->latest()->paginate(15),
         ]);
     }
 
     public function kredit(): View
     {
         return view('ceo.monitoring.kredit', [
-            'items' => Kredit::query()->with(['pengajuanKredit.user', 'pengajuanKredit.motor', 'metodeBayar'])->latest()->paginate(15),
+            'items' => Kredit::query()->with(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor', 'metodeBayar'])->latest()->paginate(15),
         ]);
     }
 
     public function angsuran(): View
     {
         return view('ceo.monitoring.angsuran', [
-            'items' => Angsuran::query()->with(['kredit.pengajuanKredit.user', 'kredit.pengajuanKredit.motor', 'verifiedBy'])->latest()->paginate(15),
+            'items' => Angsuran::query()->with(['kredit.pengajuanKredit.pelanggan.user', 'kredit.pengajuanKredit.motor', 'verifiedBy'])->latest()->paginate(15),
         ]);
     }
 
     public function pengiriman(): View
     {
         return view('ceo.monitoring.pengiriman', [
-            'items' => Pengiriman::query()->with(['kredit.pengajuanKredit.user', 'kredit.pengajuanKredit.motor'])->latest()->paginate(15),
+            'items' => Pengiriman::query()->with(['kredit.pengajuanKredit.pelanggan.user', 'kredit.pengajuanKredit.motor'])->latest()->paginate(15),
         ]);
     }
 }

@@ -37,7 +37,7 @@
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-medium text-slate-700">Down Payment</label>
-                    <input type="number" name="dp" value="{{ request('dp') }}" class="shell-input" placeholder="Contoh 5000000">
+                    <input type="number" name="dp" value="{{ request('dp') }}" class="shell-input" placeholder="Masukkan nominal down payment">
                 </div>
                 <button class="btn-primary w-full">Hitung Simulasi</button>
             </div>

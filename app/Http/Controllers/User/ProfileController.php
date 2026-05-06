@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Support\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -42,8 +41,7 @@ class ProfileController extends Controller
         }
 
         $user->update($validated);
-
-        ActivityLogger::log($user, 'update_profile', 'users', $user->id, 'User memperbarui profil.');
+        $user->syncPelangganProfile();
 
         return back()->with('success', 'Profil berhasil diperbarui.');
     }

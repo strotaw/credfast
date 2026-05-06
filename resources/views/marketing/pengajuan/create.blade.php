@@ -8,39 +8,39 @@
         <div class="grid gap-4 lg:grid-cols-2">
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Nama pelanggan</label>
-                <input type="text" name="name" value="{{ old('name') }}" class="shell-input">
+                <input type="text" name="name" value="{{ old('name') }}" class="shell-input" placeholder="Masukkan nama pelanggan">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Email pelanggan</label>
-                <input type="email" name="email" value="{{ old('email') }}" class="shell-input">
+                <input type="email" name="email" value="{{ old('email') }}" class="shell-input" placeholder="Masukkan email pelanggan">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">No. HP</label>
-                <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="shell-input">
+                <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="shell-input" placeholder="Masukkan nomor HP pelanggan">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Password awal</label>
-                <input type="password" name="password" class="shell-input" placeholder="Opsional, default password">
+                <input type="password" name="password" class="shell-input" placeholder="Masukkan password awal jika ingin dibuat manual">
             </div>
             <div class="lg:col-span-2">
                 <label class="mb-2 block text-sm font-medium text-slate-700">Alamat</label>
-                <textarea name="alamat" class="shell-textarea">{{ old('alamat') }}</textarea>
+                <textarea name="alamat" class="shell-textarea" placeholder="Masukkan alamat lengkap pelanggan">{{ old('alamat') }}</textarea>
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Kota</label>
-                <input type="text" name="kota" value="{{ old('kota') }}" class="shell-input">
+                <input type="text" name="kota" value="{{ old('kota') }}" class="shell-input" placeholder="Masukkan kota pelanggan">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Provinsi</label>
-                <input type="text" name="provinsi" value="{{ old('provinsi') }}" class="shell-input">
+                <input type="text" name="provinsi" value="{{ old('provinsi') }}" class="shell-input" placeholder="Masukkan provinsi pelanggan">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Kode Pos</label>
-                <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="shell-input">
+                <input type="text" name="kode_pos" value="{{ old('kode_pos') }}" class="shell-input" placeholder="Masukkan kode pos pelanggan">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Konfirmasi Password</label>
-                <input type="password" name="password_confirmation" class="shell-input">
+                <input type="password" name="password_confirmation" class="shell-input" placeholder="Ulangi password awal pelanggan">
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">Motor</label>
@@ -69,7 +69,7 @@
             </div>
             <div>
                 <label class="mb-2 block text-sm font-medium text-slate-700">DP</label>
-                <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input">
+                <input type="number" name="dp" value="{{ old('dp') }}" class="shell-input" placeholder="Masukkan nominal DP pelanggan">
             </div>
             <div class="lg:col-span-2">
                 <label class="mb-2 block text-sm font-medium text-slate-700">Metode bayar pilihan pelanggan</label>

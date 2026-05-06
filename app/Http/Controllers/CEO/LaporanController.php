@@ -21,9 +21,21 @@ class LaporanController extends Controller
 
     public function penjualan(): View
     {
+        $openedCreditsQuery = Kredit::query()
+            ->with(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor'])
+            ->latest('tgl_mulai_kredit');
+        $totalSalesValue = (float) (clone $openedCreditsQuery)->sum('total_kredit');
+        $totalProfit = ReportService::totalProfit();
+        $totalSalesMargin = ReportService::totalSalesMargin();
+
         return view('ceo.laporan.penjualan', [
             'topMotors' => ReportService::topMotors(10),
-            'monthlyApplications' => ReportService::monthlyApplications(12),
+            'monthlyOpenedCredits' => ReportService::monthlyOpenedCredits(12),
+            'openedCredits' => (clone $openedCreditsQuery)->paginate(12),
+            'totalOpenedCredits' => (clone $openedCreditsQuery)->count(),
+            'totalSalesValue' => $totalSalesValue,
+            'profitMargin' => ReportService::marginPercentage($totalProfit, $totalSalesValue),
+            'salesMargin' => ReportService::marginPercentage($totalSalesMargin, ReportService::totalCashSalesValue()),
         ]);
     }
 
@@ -36,28 +48,41 @@ class LaporanController extends Controller
 
     public function exportPdf(): View
     {
+        $totalSalesValue = (float) Kredit::query()->sum('total_kredit');
+        $totalProfit = ReportService::totalProfit();
+        $totalSalesMargin = ReportService::totalSalesMargin();
+
         return view('ceo.laporan.print', [
             'generatedAt' => now(),
-            'monthlyRevenue' => ReportService::monthlyRevenue(12),
+            'monthlyOpenedCredits' => ReportService::monthlyOpenedCredits(12),
             'topMotors' => ReportService::topMotors(10),
-            'badCredits' => ReportService::badCredits(20),
-            'totalProfit' => ReportService::totalProfit(),
+            'openedCredits' => Kredit::query()
+                ->with(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor'])
+                ->latest('tgl_mulai_kredit')
+                ->get(),
+            'totalOpenedCredits' => Kredit::query()->count(),
+            'totalSalesValue' => $totalSalesValue,
+            'profitMargin' => ReportService::marginPercentage($totalProfit, $totalSalesValue),
+            'salesMargin' => ReportService::marginPercentage($totalSalesMargin, ReportService::totalCashSalesValue()),
         ]);
     }
 
     public function exportExcel(): Response
     {
-        $rows = ["No Kontrak,Customer,Motor,Status Kredit,Sisa Kredit"];
+        $rows = ['Tanggal Mulai,No Kontrak,Customer,Motor,Status Kredit,Total Kredit,Sisa Kredit'];
 
         Kredit::query()
-            ->with(['pengajuanKredit.user', 'pengajuanKredit.motor'])
+            ->with(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor'])
+            ->latest('tgl_mulai_kredit')
             ->get()
             ->each(function (Kredit $kredit) use (&$rows) {
                 $rows[] = implode(',', [
+                    $kredit->tgl_mulai_kredit->format('Y-m-d'),
                     $kredit->no_kontrak,
-                    $this->escapeCsv($kredit->pengajuanKredit->user->name),
-                    $this->escapeCsv($kredit->pengajuanKredit->motor->nama_motor),
+                    $this->escapeCsv($kredit->pengajuanKredit?->user?->name ?? '-'),
+                    $this->escapeCsv($kredit->pengajuanKredit?->motor?->nama_motor ?? '-'),
                     $kredit->status_kredit,
+                    $kredit->total_kredit,
                     $kredit->sisa_kredit,
                 ]);
             });

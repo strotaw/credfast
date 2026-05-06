@@ -26,7 +26,7 @@ class DashboardController extends Controller
             'pembayaranMenunggu' => Angsuran::query()->whereIn('status', [Angsuran::STATUS_DIBAYAR, Angsuran::STATUS_TELAT])->count(),
             'totalKreditMacet' => Kredit::query()->where('status_kredit', Kredit::STATUS_MACET)->count(),
             'pendapatanBulanIni' => collect(ReportService::monthlyRevenue(1))->first()['total'] ?? 0,
-            'recentPengajuan' => PengajuanKredit::query()->with(['user', 'motor', 'marketing'])->latest()->take(8)->get(),
+            'recentPengajuan' => PengajuanKredit::query()->with(['pelanggan.user', 'motor', 'marketing'])->latest()->take(8)->get(),
         ]);
     }
 }

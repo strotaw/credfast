@@ -14,9 +14,7 @@ use App\Http\Controllers\Admin\PengirimanController as AdminPengirimanController
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\CEO\DashboardController as CEODashboardController;
 use App\Http\Controllers\CEO\LaporanController as CEOLaporanController;
-use App\Http\Controllers\CEO\MonitoringController as CEOMonitoringController;
 use App\Http\Controllers\Marketing\DashboardController as MarketingDashboardController;
 use App\Http\Controllers\Marketing\FollowUpController as MarketingFollowUpController;
 use App\Http\Controllers\Marketing\PengajuanKreditController as MarketingPengajuanKreditController;
@@ -106,14 +104,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 });
 
 Route::prefix('ceo')->name('ceo.')->middleware(['auth', 'role:ceo'])->group(function () {
-    Route::get('/dashboard', [CEODashboardController::class, 'index'])->name('dashboard');
-    Route::get('/pengajuan', [CEOMonitoringController::class, 'pengajuan'])->name('pengajuan.index');
-    Route::get('/kredit', [CEOMonitoringController::class, 'kredit'])->name('kredit.index');
-    Route::get('/angsuran', [CEOMonitoringController::class, 'angsuran'])->name('angsuran.index');
-    Route::get('/pengiriman', [CEOMonitoringController::class, 'pengiriman'])->name('pengiriman.index');
-    Route::get('/laporan-keuntungan', [CEOLaporanController::class, 'keuntungan'])->name('laporan.keuntungan');
+    Route::get('/dashboard', fn () => redirect()->route('ceo.laporan.penjualan'))->name('dashboard');
     Route::get('/laporan-penjualan', [CEOLaporanController::class, 'penjualan'])->name('laporan.penjualan');
-    Route::get('/laporan-kredit-macet', [CEOLaporanController::class, 'kreditMacet'])->name('laporan.kredit-macet');
     Route::get('/laporan/export-pdf', [CEOLaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
     Route::get('/laporan/export-excel', [CEOLaporanController::class, 'exportExcel'])->name('laporan.export-excel');
 });

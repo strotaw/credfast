@@ -35,7 +35,7 @@
                     <option value="{{ $status }}" @selected($kredit->status_kredit === $status)>{{ str($status)->title() }}</option>
                 @endforeach
             </select>
-            <textarea name="keterangan_status_kredit" class="shell-textarea mt-4" placeholder="Keterangan status">{{ $kredit->keterangan_status_kredit }}</textarea>
+            <textarea name="keterangan_status_kredit" class="shell-textarea mt-4" placeholder="Masukkan keterangan perubahan status kredit">{{ $kredit->keterangan_status_kredit }}</textarea>
             <button class="btn-primary mt-4">Simpan Status</button>
         </form>
     </div>

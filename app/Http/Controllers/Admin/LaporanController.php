@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Angsuran;
 use App\Models\Kredit;
-use App\Models\PengajuanKredit;
 use App\Support\ReportService;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
@@ -38,10 +36,10 @@ class LaporanController extends Controller
 
     public function exportExcel(): Response
     {
-        $rows = ["No Kontrak,Customer,Motor,Status Kredit,Sisa Kredit"];
+        $rows = ['No Kontrak,Customer,Motor,Status Kredit,Sisa Kredit'];
 
         Kredit::query()
-            ->with(['pengajuanKredit.user', 'pengajuanKredit.motor'])
+            ->with(['pengajuanKredit.pelanggan.user', 'pengajuanKredit.motor'])
             ->get()
             ->each(function (Kredit $kredit) use (&$rows) {
                 $rows[] = implode(',', [

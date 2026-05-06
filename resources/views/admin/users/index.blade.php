@@ -5,7 +5,7 @@
 @section('content')
     <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <form method="GET" class="flex flex-wrap gap-3">
-            <input type="text" name="q" value="{{ request('q') }}" class="shell-input" placeholder="Cari nama / email">
+            <input type="text" name="q" value="{{ request('q') }}" class="shell-input" placeholder="Cari user berdasarkan nama atau email">
             <select name="role" class="shell-select">
                 <option value="">Semua role</option>
                 @foreach ($roles as $role)

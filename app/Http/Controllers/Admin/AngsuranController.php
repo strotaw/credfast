@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Angsuran;
-use App\Support\ActivityLogger;
 use App\Support\CreditWorkflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +17,7 @@ class AngsuranController extends Controller
 
         return view('admin.angsuran.index', [
             'items' => Angsuran::query()
-                ->with(['kredit.pengajuanKredit.user', 'kredit.pengajuanKredit.motor', 'verifiedBy'])
+                ->with(['kredit.pengajuanKredit.pelanggan.user', 'kredit.pengajuanKredit.motor', 'verifiedBy'])
                 ->when($request->filled('status'), fn ($query) => $query->where('status', $request->string('status')))
                 ->orderBy('tanggal_jatuh_tempo')
                 ->paginate(15)
@@ -30,7 +29,7 @@ class AngsuranController extends Controller
     public function show(Angsuran $angsuran): View
     {
         return view('admin.angsuran.show', [
-            'item' => $angsuran->load(['kredit.pengajuanKredit.user', 'kredit.pengajuanKredit.motor', 'verifiedBy']),
+            'item' => $angsuran->load(['kredit.pengajuanKredit.pelanggan.user', 'kredit.pengajuanKredit.motor', 'verifiedBy']),
         ]);
     }
 
@@ -50,8 +49,6 @@ class AngsuranController extends Controller
 
         CreditWorkflow::refreshKreditStatus($angsuran->kredit);
 
-        ActivityLogger::log(auth()->user(), 'validasi_angsuran', 'angsuran', $angsuran->id, 'Admin memvalidasi pembayaran.');
-
         return back()->with('success', 'Pembayaran berhasil divalidasi.');
     }
 
@@ -67,8 +64,6 @@ class AngsuranController extends Controller
             'verified_at' => now(),
             'keterangan' => $validated['keterangan'],
         ]);
-
-        ActivityLogger::log(auth()->user(), 'tolak_angsuran', 'angsuran', $angsuran->id, 'Admin menolak pembayaran.');
 
         return back()->with('success', 'Pembayaran berhasil ditolak.');
     }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Asuransi;
-use App\Support\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -40,8 +39,6 @@ class AsuransiController extends Controller
         $validated['url_logo'] = $this->storePublicFile($request, 'url_logo', 'motor');
         $item = Asuransi::create($validated);
 
-        ActivityLogger::log(auth()->user(), 'create_asuransi', 'asuransi', $item->id, 'Admin menambah asuransi.');
-
         return redirect()->route('admin.asuransi.index')->with('success', 'Asuransi berhasil ditambahkan.');
     }
 
@@ -74,8 +71,6 @@ class AsuransiController extends Controller
         $validated['url_logo'] = $this->storePublicFile($request, 'url_logo', 'motor', $asuransi->url_logo);
         $asuransi->update($validated);
 
-        ActivityLogger::log(auth()->user(), 'update_asuransi', 'asuransi', $asuransi->id, 'Admin memperbarui asuransi.');
-
         return redirect()->route('admin.asuransi.index')->with('success', 'Asuransi berhasil diperbarui.');
     }
 
@@ -83,8 +78,6 @@ class AsuransiController extends Controller
     {
         $this->deletePublicFile($asuransi->url_logo);
         $asuransi->delete();
-
-        ActivityLogger::log(auth()->user(), 'delete_asuransi', 'asuransi', $asuransi->id, 'Admin menghapus asuransi.');
 
         return redirect()->route('admin.asuransi.index')->with('success', 'Asuransi berhasil dihapus.');
     }

@@ -13,12 +13,10 @@ class FollowUpController extends Controller
     {
         return view('marketing.follow-up.index', [
             'pengajuanList' => PengajuanKredit::query()
-                ->with(['user', 'motor', 'marketing'])
+                ->with(['pelanggan.user', 'motor', 'marketing'])
                 ->whereIn('status_pengajuan', [
                     PengajuanKredit::STATUS_DIPROSES,
-                    PengajuanKredit::STATUS_DATA_KURANG,
-                    PengajuanKredit::STATUS_SURVEY,
-                    PengajuanKredit::STATUS_DIREKOMENDASIKAN,
+                    PengajuanKredit::STATUS_BERMASALAH,
                 ])
                 ->latest()
                 ->paginate(10),
@@ -31,8 +29,7 @@ class FollowUpController extends Controller
             ->where('role', User::ROLE_USER)
             ->whereHas('pengajuanKredit', fn ($query) => $query->whereIn('status_pengajuan', [
                 PengajuanKredit::STATUS_DIPROSES,
-                PengajuanKredit::STATUS_SURVEY,
-                PengajuanKredit::STATUS_DIREKOMENDASIKAN,
+                PengajuanKredit::STATUS_BERMASALAH,
             ]))
             ->withCount('pengajuanKredit')
             ->latest()

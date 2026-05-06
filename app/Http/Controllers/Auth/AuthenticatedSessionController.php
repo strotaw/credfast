@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Support\ActivityLogger;
 use App\Support\RoleRedirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,14 +31,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        ActivityLogger::log($request->user(), 'login', 'users', $request->user()?->id, 'User berhasil login.');
-
         return redirect()->intended(RoleRedirect::dashboard($request->user()->role));
     }
 
     public function destroy(Request $request): RedirectResponse
     {
-        ActivityLogger::log($request->user(), 'logout', 'users', $request->user()?->id, 'User logout dari aplikasi.');
 
         Auth::logout();
 
